@@ -17,8 +17,6 @@ typedef struct zmqControlMsg {
 } zmqControlMsg;
 
 void* theContext = NULL;
-void* controlSub = NULL;
-void* dataSub = NULL;
 bool  keepGoing = true;
 pthread_t thread1;
 pthread_t thread2;
@@ -117,6 +115,17 @@ void processDataMsg(zmq_msg_t* zmsg)
 
 void* mainLoop(void*)
 {
+   // control socket
+   void* controlSub = zmq_socket(theContext, controlReceiver);
+   if (controlReceiver == ZMQ_SUB) {
+      zmq_setsockopt (controlSub, ZMQ_SUBSCRIBE, "", 0);
+   }
+   zmq_bind(controlSub, ZMQ_CONTROL_ENDPOINT);
+
+   // data socket
+   void* dataSub = zmq_socket(theContext, ZMQ_SUB);
+   zmq_bind(dataSub, "tcp://127.0.0.1:5101");
+
    zmq_msg_t zmsg;
    zmq_msg_init(&zmsg);
 
@@ -188,17 +197,6 @@ int main(int argc, char** argv)
 
    // initialize zmq
    theContext = zmq_ctx_new();
-
-   // control socket
-   controlSub = zmq_socket(theContext, controlReceiver);
-   if (controlReceiver == ZMQ_SUB) {
-      zmq_setsockopt (controlSub, ZMQ_SUBSCRIBE, "", 0);
-   }
-   zmq_bind(controlSub, ZMQ_CONTROL_ENDPOINT);
-
-   // data socket
-   dataSub = zmq_socket(theContext, ZMQ_SUB);
-   zmq_bind(dataSub, "tcp://127.0.0.1:5101");
 
    // start main loop
    pthread_create(&thread1, NULL, mainLoop, NULL);
