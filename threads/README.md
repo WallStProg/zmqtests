@@ -15,8 +15,8 @@ The sample programs here demonstrate several different approaches to inter-threa
 > - The code supports arbitrary numbers of messages;
 > - Messages can be sent at any time;
 > - The code is likely to be implemented as a library which provides an interface between ZeroMQ and the application.  In this scenario, the library code (the code calling ZeroMQ functions) cannot make any assumptions about its context.
-
-  For instance, in my own case I need to deal with library code hosted by a Java program running under the JVM -- that library code has no control over when threads are started or stopped.
+>
+> For instance, in my own case I need to deal with library code hosted by a Java program running under the JVM -- that library code has no control over when threads are started or stopped.
 
 ## TL;DR
 - PAIR sockets don't work -- they will eventually deadlock
@@ -261,7 +261,7 @@ Push/pull sockets have the desirable quality that they block on send if the mess
 
 > When a ZMQ\_PUSH socket enters the mute state due to having reached the high water mark for all downstream nodes, or if there are no downstream nodes at all, then any zmq_send(3) operations on the socket shall block until the mute state ends or at least one downstream node becomes available for sending; **messages are not discarded**. 
 > 
-<http://api.zeromq.org/4-2:zmq-socket>
+> <http://api.zeromq.org/4-2:zmq-socket>
 
 ### CLIENT/SERVER
 Client/Server sockets also work, both with and without `-poll`.
