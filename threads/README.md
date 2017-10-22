@@ -7,10 +7,10 @@ In multi-threaded programs that use ZeroMQ, there are common use-cases that requ
 
 The example code from [The ZeroMQ Guide](http://zguide.zeromq.org/page:all#Signaling-Between-Threads-PAIR-Sockets) is, ummm, misleading at best -- several of the examples given will fail under certain conditions, by either dropping messages or deadlocking.
 
-The sample programs here demonstrate several different approaches to inter-thread signalling with ZeroMQ, and show which work and which don't in "real-world" scenarios[^realworld].
+The sample programs here demonstrate several different approaches to inter-thread signalling with ZeroMQ, and show which work and which don't in "real-world" scenarios.
 
-[^realworld]: By "real-world" in this case I mean the following:
- 
+> By "real-world" in this case I mean the following:
+>
   - The code supports an arbitrary number of threads;
   - The code supports arbitrary numbers of messages;
   - Messages can be sent at any time;
@@ -39,11 +39,11 @@ The program waits for the control threads to finish, then terminates the main th
 
 ### Socket-specific code
 
-For the non-thread-safe sockets (e.g, PUB/SUB, PAIR), each control thread creates its sending socket in thread-local storage, along with a clean-up function that call `zmq_close` on the socket when the thread terminates[^tls].
+For the non-thread-safe sockets (e.g, PUB/SUB, PAIR), each control thread creates its sending socket in thread-local storage, along with a clean-up function that call `zmq_close` on the socket when the thread terminates.
 
-[^tls]: Note that this approach isn't practical in all cases -- e.g., in code hosted by a Java process it's not always possible to ensure that each sending thread will terminate when desired.  In that kind of situation, it's possible to call `zmq_ctx_shutdown` rather than `zmq_ctx_destroy` to terminate ZeroMQ, even though not all sockets have been closed.  This will presumably result in memory and/or resource "leaks" at shutdown, but it's the best that can be done.
+> Note that this approach isn't practical in all cases -- e.g., in code hosted by a Java process it's not always possible to ensure that each sending thread will terminate when desired.  In that kind of situation, it's possible to call `zmq_ctx_shutdown` rather than `zmq_ctx_destroy` to terminate ZeroMQ, even though not all sockets have been closed.  This will presumably result in memory and/or resource "leaks" at shutdown, but it's the best that can be done.
 
-When using ZMQ_PAIR sockets, the control thread(s) will connect and disconnect from the specified endpoint for each send.  This is necessary because ZMQ_PAIR sockets are *exclusive* - i.e., there can only be a single ZMQ_PAIR connection active at any given time.
+When using ZMQ\_PAIR sockets, the control thread(s) will connect and disconnect from the specified endpoint for each send.  This is necessary because ZMQ\_PAIR sockets are *exclusive* - i.e., there can only be a single ZMQ_PAIR connection active at any given time.
 
 When run with the `-poll` switch, the sending thread(s) call `zmq_poll` following `zmq_connect`, as hinted at [here](<https://github.com/zeromq/libzmq/issues/2267>).  
 
@@ -159,9 +159,9 @@ The issue with dropping initial messages is a [well-known problem with ZeroMQ](h
 Unfortunately, the recommended work-around (inserting `zmq_poll` calls after connects and sends) only works up to a point.  From the various issues and email threads, it appears that the `zmq_poll` must be issued on the SUB side of the connection, but in "real-world" code that work-around is not practical:
 
 - The SUB side has no way to know that it is supposed to issue the `zmq_poll` (unlike in the simple examples documented).
-- Again, in "real-world" code the SUB side is most likely *already* in a `zmq_poll` call, but the subscription information is apparently exchanged only on entry to `zmq_poll`[^poll].
+- Again, in "real-world" code the SUB side is most likely *already* in a `zmq_poll` call, but the subscription information is apparently exchanged only on entry to `zmq_poll`.
 
-[^poll]: A possible solution to this problem would be to have the SUB side return `EINTR` from the `zmq_poll` call when a connection attempt is made.   This would allow the code on the SUB side to re-enter the `zmq_poll` call, which could trigger the exchange of subscription information.  
+> A possible solution to this problem would be to have the SUB side return `EINTR` from the `zmq_poll` call when a connection attempt is made.   This would allow the code on the SUB side to re-enter the `zmq_poll` call, which could trigger the exchange of subscription information.  I have no idea whether this would be practical, or even possible.
 
 ### PAIRs with 1 thread and poll
 When using ZMQ_PAIR sockets, the sending and receving threads deadlock, with or without `-poll`, and the program has to be terminated with Ctrl-C.
@@ -200,36 +200,36 @@ $ gdb -p $(pidof pairs)
 Thread 5 (Thread 0x7f029a6f1700 (LWP 15800)):
 #0  0x00000033bfedf383 in poll () from /lib64/libc.so.6
 #1  0x00007f029af5e83e in zmq::socket_poller_t::wait (this=0x7f029a6f0d30, events_=0x7f0294004a20, n_events_=2, timeout_=-1)
-    at /home/btorpey/work/libzmq/nyfix/src/socket_poller.cpp:447
+    at ~/work/libzmq/src/socket_poller.cpp:447
 #2  0x00007f029af5c376 in zmq_poller_wait_all (poller_=0x7f029a6f0d30, events=0x7f0294004a20, n_events=2, timeout_=-1)
-    at /home/btorpey/work/libzmq/nyfix/src/zmq.cpp:1371
+    at ~/work/libzmq/src/zmq.cpp:1371
 #3  0x00007f029af5cbda in zmq_poller_poll (items_=0x7f029a6f0e00, nitems_=2, timeout_=-1)
-    at /home/btorpey/work/libzmq/nyfix/src/zmq.cpp:813
+    at ~/work/libzmq/src/zmq.cpp:813
 #4  0x00007f029af5bd09 in zmq_poll (items_=0x7f029a6f0e00, nitems_=2, timeout_=-1)
-    at /home/btorpey/work/libzmq/nyfix/src/zmq.cpp:861
-#5  0x0000000000404992 in mainLoop () at /home/btorpey/work/zmqtests/threads/pairs.cpp:88
+    at ~/work/libzmq/src/zmq.cpp:861
+#5  0x0000000000404992 in mainLoop () at ~/work/zmqtests/threads/pairs.cpp:88
 #6  0x00000033c0607aa1 in start_thread () from /lib64/libpthread.so.0
 #7  0x00000033bfee8bcd in clone () from /lib64/libc.so.6
 
 Thread 4 (Thread 0x7f0299cf0700 (LWP 15801)):
 #0  0x00000033bfedf383 in poll () from /lib64/libc.so.6
 #1  0x00007f029af35127 in zmq::signaler_t::wait (this=0x7f028c000e08, timeout_=-1)
-    at /home/btorpey/work/libzmq/nyfix/src/signaler.cpp:233
+    at ~/work/libzmq/src/signaler.cpp:233
 #2  0x00007f029af097bb in zmq::mailbox_t::recv (this=0x7f028c000da0, cmd_=0x7f0299cefc00, timeout_=-1)
-    at /home/btorpey/work/libzmq/nyfix/src/mailbox.cpp:81
+    at ~/work/libzmq/src/mailbox.cpp:81
 #3  0x00007f029af3aaee in zmq::socket_base_t::process_commands (this=0x7f028c0008c0, timeout_=-1, throttle_=false)
-    at /home/btorpey/work/libzmq/nyfix/src/socket_base.cpp:1335
+    at ~/work/libzmq/src/socket_base.cpp:1335
 #4  0x00007f029af3a2e4 in zmq::socket_base_t::send (this=0x7f028c0008c0, msg_=0x7f0299cefd60, flags_=0)
-    at /home/btorpey/work/libzmq/nyfix/src/socket_base.cpp:1148
+    at ~/work/libzmq/src/socket_base.cpp:1148
 #5  0x00007f029af5ab76 in s_sendmsg (s_=0x7f028c0008c0, msg_=0x7f0299cefd60, flags_=0)
-    at /home/btorpey/work/libzmq/nyfix/src/zmq.cpp:375
+    at ~/work/libzmq/src/zmq.cpp:375
 #6  0x00007f029af5acbd in zmq_send (s_=0x7f028c0008c0, buf_=0x7f0299cefe40, len_=24, flags_=0)
-    at /home/btorpey/work/libzmq/nyfix/src/zmq.cpp:409
+    at ~/work/libzmq/src/zmq.cpp:409
 #7  0x0000000000404836 in sendCommand (context=0x1a88ec0, msg=0x7f0299cefe40, msgSize=24)
-    at /home/btorpey/work/zmqtests/threads/pairs.cpp:55
+    at ~/work/zmqtests/threads/pairs.cpp:55
 #8  0x00000000004042e9 in sendControlMsg (context=0x1a88ec0, command=80 'P', voidArg=0x1a88150, longArg=121)
-    at /home/btorpey/work/zmqtests/threads/common.h:55
-#9  0x0000000000404364 in commandLoop (threadAddr=0x1a88150) at /home/btorpey/work/zmqtests/threads/common.h:65
+    at ~/work/zmqtests/threads/common.h:55
+#9  0x0000000000404364 in commandLoop (threadAddr=0x1a88150) at ~/work/zmqtests/threads/common.h:65
 #10 0x00000033c0607aa1 in start_thread () from /lib64/libpthread.so.0
 #11 0x00000033bfee8bcd in clone () from /lib64/libc.so.6
 ...
@@ -257,11 +257,11 @@ Waiting...
 $
 ```
 
-Push/pull sockets have the desirable quality that they block on send if the message cannot be delivered[^pushpull]:
+Push/pull sockets have the desirable quality that they block on send if the message cannot be delivered:
 
-> When a ZMQ_PUSH socket enters the mute state due to having reached the high water mark for all downstream nodes, or if there are no downstream nodes at all, then any zmq_send(3) operations on the socket shall block until the mute state ends or at least one downstream node becomes available for sending; **messages are not discarded**.
-
-[^pushpull]: <http://api.zeromq.org/4-2:zmq-socket>
+> When a ZMQ\_PUSH socket enters the mute state due to having reached the high water mark for all downstream nodes, or if there are no downstream nodes at all, then any zmq_send(3) operations on the socket shall block until the mute state ends or at least one downstream node becomes available for sending; **messages are not discarded**. 
+> 
+<http://api.zeromq.org/4-2:zmq-socket>
 
 ### CLIENT/SERVER
 Client/Server sockets also work, both with and without `-poll`.
@@ -293,9 +293,9 @@ Client/server sockets have the added benefit that they are thread-safe by design
 
 For inter-thread signalling, the examples given in [The ZeroMQ Guide](http://zguide.zeromq.org/page:all#Signaling-Between-Threads-PAIR-Sockets) are misleading -- while the samples will work in the simple use-case documented, for "real-world" programs where an abitrary number of threads need to be able to send an arbitrary number of messages at any time, they fail by either dropping initial messages or hanging.
 
-For reliable inter-thread signalling, either PUSH/PULL or CLIENT/SERVER sockets should be used[^routerdealer], primarily because both socket types have the desirable quality that sends block until the message can be delivered.
+For reliable inter-thread signalling, either PUSH/PULL or CLIENT/SERVER sockets should be used, primarily because both socket types have the desirable quality that sends block until the message can be delivered.
 
-[^routerdealer]: I didn't bother testing ROUTER/DEALER sockets because they *should* operate similarly to PUSH/PULL, but have the added complication of requiring multi-part messages.  If anyone cares enough, I'd be happy to accept a pull request.
+> I didn't bother testing ROUTER/DEALER sockets because they *should* operate similarly to PUSH/PULL, but have the added complication of requiring multi-part messages.  If anyone cares enough, I'd be happy to accept a pull request.
 
 While other socket types (e.g., PUB/SUB, PAIR) may *appear* to work, they will fail under certain conditions, and thus cannot be relied on. 
 
@@ -311,8 +311,6 @@ Some additional notes:
 Dropped messages at connect: <https://github.com/zeromq/libzmq/issues/2267>, <https://github.com/zeromq/libzmq/issues/1594>
 
 Deadlock w/ZMQ_PAIR sockets: <https://github.com/zeromq/libzmq/issues/2759>
-
-## Footnotes
 
 
 

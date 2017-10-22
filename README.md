@@ -2,10 +2,10 @@
 
 ## threads
 
-The sample programs here demonstrate several different approaches to inter-thread signalling with ZeroMQ, and show which work and which don't in "real-world" scenarios[^realworld].
+The sample programs here demonstrate several different approaches to inter-thread signalling with ZeroMQ, and show which work and which don't in "real-world" scenarios.
 
-[^realworld]: By "real-world" in this case I mean the following:
- 
+> By "real-world" in this case I mean the following:
+> 
   - The code supports an arbitrary number of threads;
   - The code supports arbitrary numbers of messages;
   - Messages can be sent at any time;
