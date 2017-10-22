@@ -6,8 +6,8 @@ The sample programs here demonstrate several different approaches to inter-threa
 
 > By "real-world" in this case I mean the following:
 > 
-  - The code supports an arbitrary number of threads;
-  - The code supports arbitrary numbers of messages;
-  - Messages can be sent at any time;
-  - The code is likely to be implemented as a library which provides an interface between ZeroMQ and the application.  In this scenario, the library code (the code calling ZeroMQ functions) cannot make any assumptions about its context.
+> - The code supports an arbitrary number of threads;
+> - The code supports arbitrary numbers of messages;
+> - Messages can be sent at any time;
+> - The code is likely to be implemented as a library which provides an interface between ZeroMQ and the application.  In this scenario, the library code (the code calling ZeroMQ functions) cannot make any assumptions about its context.
 
