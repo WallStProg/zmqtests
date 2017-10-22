@@ -2,56 +2,56 @@
 Thread 5 (Thread 0x7f029a6f1700 (LWP 15800)):
 #0  0x00000033bfedf383 in poll () from /lib64/libc.so.6
 #1  0x00007f029af5e83e in zmq::socket_poller_t::wait (this=0x7f029a6f0d30, events_=0x7f0294004a20, n_events_=2, timeout_=-1)
-    at /home/btorpey/work/libzmq/nyfix/src/socket_poller.cpp:447
+    at ~/work/libzmq/src/socket_poller.cpp:447
 #2  0x00007f029af5c376 in zmq_poller_wait_all (poller_=0x7f029a6f0d30, events=0x7f0294004a20, n_events=2, timeout_=-1)
-    at /home/btorpey/work/libzmq/nyfix/src/zmq.cpp:1371
+    at ~/work/libzmq/src/zmq.cpp:1371
 #3  0x00007f029af5cbda in zmq_poller_poll (items_=0x7f029a6f0e00, nitems_=2, timeout_=-1)
-    at /home/btorpey/work/libzmq/nyfix/src/zmq.cpp:813
+    at ~/work/libzmq/src/zmq.cpp:813
 #4  0x00007f029af5bd09 in zmq_poll (items_=0x7f029a6f0e00, nitems_=2, timeout_=-1)
-    at /home/btorpey/work/libzmq/nyfix/src/zmq.cpp:861
-#5  0x0000000000404992 in mainLoop () at /home/btorpey/work/zmqtests/threads/pairs.cpp:88
+    at ~/work/libzmq/src/zmq.cpp:861
+#5  0x0000000000404992 in mainLoop () at ~/work/zmqtests/threads/pairs.cpp:88
 #6  0x00000033c0607aa1 in start_thread () from /lib64/libpthread.so.0
 #7  0x00000033bfee8bcd in clone () from /lib64/libc.so.6
 
 Thread 4 (Thread 0x7f0299cf0700 (LWP 15801)):
 #0  0x00000033bfedf383 in poll () from /lib64/libc.so.6
 #1  0x00007f029af35127 in zmq::signaler_t::wait (this=0x7f028c000e08, timeout_=-1)
-    at /home/btorpey/work/libzmq/nyfix/src/signaler.cpp:233
+    at ~/work/libzmq/src/signaler.cpp:233
 #2  0x00007f029af097bb in zmq::mailbox_t::recv (this=0x7f028c000da0, cmd_=0x7f0299cefc00, timeout_=-1)
-    at /home/btorpey/work/libzmq/nyfix/src/mailbox.cpp:81
+    at ~/work/libzmq/src/mailbox.cpp:81
 #3  0x00007f029af3aaee in zmq::socket_base_t::process_commands (this=0x7f028c0008c0, timeout_=-1, throttle_=false)
-    at /home/btorpey/work/libzmq/nyfix/src/socket_base.cpp:1335
+    at ~/work/libzmq/src/socket_base.cpp:1335
 #4  0x00007f029af3a2e4 in zmq::socket_base_t::send (this=0x7f028c0008c0, msg_=0x7f0299cefd60, flags_=0)
-    at /home/btorpey/work/libzmq/nyfix/src/socket_base.cpp:1148
+    at ~/work/libzmq/src/socket_base.cpp:1148
 #5  0x00007f029af5ab76 in s_sendmsg (s_=0x7f028c0008c0, msg_=0x7f0299cefd60, flags_=0)
-    at /home/btorpey/work/libzmq/nyfix/src/zmq.cpp:375
+    at ~/work/libzmq/src/zmq.cpp:375
 #6  0x00007f029af5acbd in zmq_send (s_=0x7f028c0008c0, buf_=0x7f0299cefe40, len_=24, flags_=0)
-    at /home/btorpey/work/libzmq/nyfix/src/zmq.cpp:409
+    at ~/work/libzmq/src/zmq.cpp:409
 #7  0x0000000000404836 in sendCommand (context=0x1a88ec0, msg=0x7f0299cefe40, msgSize=24)
-    at /home/btorpey/work/zmqtests/threads/pairs.cpp:55
+    at ~/work/zmqtests/threads/pairs.cpp:55
 #8  0x00000000004042e9 in sendControlMsg (context=0x1a88ec0, command=80 'P', voidArg=0x1a88150, longArg=121)
-    at /home/btorpey/work/zmqtests/threads/common.h:55
-#9  0x0000000000404364 in commandLoop (threadAddr=0x1a88150) at /home/btorpey/work/zmqtests/threads/common.h:65
+    at ~/work/zmqtests/threads/common.h:55
+#9  0x0000000000404364 in commandLoop (threadAddr=0x1a88150) at ~/work/zmqtests/threads/common.h:65
 #10 0x00000033c0607aa1 in start_thread () from /lib64/libpthread.so.0
 #11 0x00000033bfee8bcd in clone () from /lib64/libc.so.6
 
 Thread 3 (Thread 0x7f02992ef700 (LWP 15802)):
 #0  0x00000033bfee91c3 in epoll_wait () from /lib64/libc.so.6
-#1  0x00007f029af02efc in zmq::epoll_t::loop (this=0x7f0294002e30) at /home/btorpey/work/libzmq/nyfix/src/epoll.cpp:168
-#2  0x00007f029af031b0 in zmq::epoll_t::worker_routine (arg_=0x7f0294002e30) at /home/btorpey/work/libzmq/nyfix/src/epoll.cpp:203
-#3  0x00007f029af4e982 in thread_routine (arg_=0x7f0294002eb0) at /home/btorpey/work/libzmq/nyfix/src/thread.cpp:106
+#1  0x00007f029af02efc in zmq::epoll_t::loop (this=0x7f0294002e30) at ~/work/libzmq/src/epoll.cpp:168
+#2  0x00007f029af031b0 in zmq::epoll_t::worker_routine (arg_=0x7f0294002e30) at ~/work/libzmq/src/epoll.cpp:203
+#3  0x00007f029af4e982 in thread_routine (arg_=0x7f0294002eb0) at ~/work/libzmq/src/thread.cpp:106
 #4  0x00000033c0607aa1 in start_thread () from /lib64/libpthread.so.0
 #5  0x00000033bfee8bcd in clone () from /lib64/libc.so.6
 
 Thread 2 (Thread 0x7f0293fff700 (LWP 15803)):
 #0  0x00000033bfee91c3 in epoll_wait () from /lib64/libc.so.6
-#1  0x00007f029af02efc in zmq::epoll_t::loop (this=0x7f02940036b0) at /home/btorpey/work/libzmq/nyfix/src/epoll.cpp:168
-#2  0x00007f029af031b0 in zmq::epoll_t::worker_routine (arg_=0x7f02940036b0) at /home/btorpey/work/libzmq/nyfix/src/epoll.cpp:203
-#3  0x00007f029af4e982 in thread_routine (arg_=0x7f0294003730) at /home/btorpey/work/libzmq/nyfix/src/thread.cpp:106
+#1  0x00007f029af02efc in zmq::epoll_t::loop (this=0x7f02940036b0) at ~/work/libzmq/src/epoll.cpp:168
+#2  0x00007f029af031b0 in zmq::epoll_t::worker_routine (arg_=0x7f02940036b0) at ~/work/libzmq/src/epoll.cpp:203
+#3  0x00007f029af4e982 in thread_routine (arg_=0x7f0294003730) at ~/work/libzmq/src/thread.cpp:106
 #4  0x00000033c0607aa1 in start_thread () from /lib64/libpthread.so.0
 #5  0x00000033bfee8bcd in clone () from /lib64/libc.so.6
 
 Thread 1 (Thread 0x7f029a901720 (LWP 15799)):
 #0  0x00000033c06082fd in pthread_join () from /lib64/libpthread.so.0
-#1  0x0000000000404eca in main (argc=7, argv=0x7ffe69e36918) at /home/btorpey/work/zmqtests/threads/pairs.cpp:184
+#1  0x0000000000404eca in main (argc=7, argv=0x7ffe69e36918) at ~/work/zmqtests/threads/pairs.cpp:184
 Detaching from program: /shared/work/zmqtests/threads/pairs, process 15799

@@ -58,7 +58,7 @@ The program names should be self-explanatory.  ALL programs take the same comman
 Param&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   | Meaning
 ------------- | -------------
 -threads n | Run "n" control threads.  Default is 10.
--msgs n | Each control thread sends n ping commands. Default is 100.
+-msgs n | Each control thread sends n ping commands. Default is 1000.
 -poll | Call `zmq_poll` after `zmq_connect` (and `zmq_send`, for pub/sub).
 -sleep n | Sleep for n seconds after control threads finish (to allow time for messages to be received and processed).  Default is 1.
 -debug | Verbose debugging information.
