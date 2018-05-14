@@ -32,7 +32,7 @@ void sendCommand(void* context, zmqControlMsg* msg, int msgSize)
       checkInt(rc);
    }
 
-   int i = zmq_send(controlPub, msg, msgSize, 0);
+   int i = zmq_send(controlPub, msg, msgSize, dontWaitFlag ? ZMQ_DONTWAIT : 0);
    checkInt(i);
    assert(i == msgSize);
 
@@ -101,14 +101,9 @@ int main(int argc, char** argv)
 {
    int rc;
 
-   parseParams(argc, argv);
    printVersion();
-
    fprintf(stderr, "Using pair sockets\n");
-   fprintf(stderr, "Sleeping for %ld seconds at shutdown\n", sleepDuration);
-   if (pollFlag) {
-      fprintf(stderr, "Polling after connect\n");
-   }
+   parseParams(argc, argv);
 
    // setup signal handler
    signal(SIGINT, &onSignal);
@@ -156,7 +151,11 @@ int main(int argc, char** argv)
    rc = zmq_ctx_destroy(theContext);
    checkInt(rc);
 
-    printResults();
+   checkResults();
+   printResults();
 
-  return 0;
+   if (failed)
+      return 1;
+   else
+      return 0;
 }

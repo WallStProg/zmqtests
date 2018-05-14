@@ -72,14 +72,10 @@ int main(int argc, char** argv)
 {
    int rc;
 
-   parseParams(argc, argv);
    printVersion();
 
    fprintf(stderr, "Using client/server sockets\n");
-   fprintf(stderr, "Sleeping for %ld seconds at shutdown\n", sleepDuration);
-   if (pollFlag) {
-      fprintf(stderr, "Polling after connect\n");
-   }
+   parseParams(argc, argv);
 
    // setup signal handler
    signal(SIGINT, &onSignal);
@@ -133,7 +129,6 @@ int main(int argc, char** argv)
    // wait for main thread to finish
    pthread_join(mainThread, NULL);
 
-
    rc = zmq_close(controlPub);
    checkInt(rc);
 
@@ -143,7 +138,11 @@ int main(int argc, char** argv)
    rc = zmq_ctx_destroy(theContext);
    checkInt(rc);
 
+   checkResults();
    printResults();
 
-   return 0;
+   if (failed)
+      return 1;
+   else
+      return 0;
 }

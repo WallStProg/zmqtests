@@ -17,6 +17,10 @@ bool  pollFlag = false;
 long  sleepDuration = 1;
 int   numMsgs = 1000;
 int   numThreads = 10;
+bool  failed = false;
+bool  dontWaitFlag = false;
+int   linger = 30000;
+int   msgSleep = 0;
 
 // max sent/received
 std::map<void*, long> maxControlMsgSent;
@@ -60,6 +64,8 @@ void* createSocket(void* context, int type)
    checkVoid(sock);
    if (debugFlag)
       fprintf(stderr, "\nCreated socket %x\n", sock);
+
+   int rc = zmq_setsockopt(sock, ZMQ_LINGER, &linger, sizeof(linger));
    return sock;
 }
 
@@ -98,7 +104,8 @@ void* commandLoop(void* threadAddr)
          fprintf(stderr, ".");
       }
 
-      usleep(sleepDuration);
+      usleep(msgSleep);
+
       if (nextMsgNum >= numMsgs) {
          break;
       }
@@ -123,6 +130,7 @@ void processControlMsg(zmq_msg_t* zmsg)
 
       long maxMsgNum = maxControlMsgReceived[threadAddr];
       if (msgNum != maxMsgNum+1) {
+         failed = true;
          fprintf(stderr, "Thread %x received # %ld, expected # %ld\n", threadAddr, msgNum, maxMsgNum+1);
       }
       else if (debugFlag) {
@@ -140,6 +148,20 @@ void processControlMsg(zmq_msg_t* zmsg)
 
 void processDataMsg(zmq_msg_t* zmsg)
 {
+}
+
+void checkResults()
+{
+   for (std::map<void*, long>::iterator i = maxControlMsgSent.begin(); i != maxControlMsgSent.end(); ++i) {
+      if (i->second != numMsgs) {
+         failed = true;
+      }
+   }
+   for (std::map<void*, long>::iterator i = maxControlMsgReceived.begin(); i != maxControlMsgReceived.end(); ++i) {
+      if (i->second != numMsgs) {
+         failed = true;
+      }
+   }
 }
 
 
@@ -185,6 +207,13 @@ void parseParams(int argc, char** argv)
       else if (strcasecmp("-msgs", argv[i]) == 0) {
          numMsgs = atoi(argv[++i]);
       }
+      else if (strcasecmp("-linger", argv[i]) == 0) {
+         linger = atoi(argv[++i]);
+      }
+      else if (strcasecmp("-rate", argv[i]) == 0) {
+         int rate = atoi(argv[++i]);
+         msgSleep = (1.0 / rate) * 1000000;            // sleep in usec
+      }
       else if (strcasecmp("-threads", argv[i]) == 0) {
          numThreads = atoi(argv[++i]);
       }
@@ -194,10 +223,19 @@ void parseParams(int argc, char** argv)
       else if (!strcmp("-poll", argv[i])) {
          pollFlag = true;
       }
+      else if (!strcmp("-nowait", argv[i])) {
+         dontWaitFlag = true;
+      }
       else if (!strcmp("-quiet", argv[i])) {
          quietFlag = true;
       }
    }
+
+   fprintf(stderr, "Inter-message sleep = %d us\n", msgSleep);
+   if (pollFlag) {
+      fprintf(stderr, "Polling after connect\n");
+   }
+   fprintf(stderr, "Sleeping for %ld seconds at shutdown\n", sleepDuration);
 }
 
 void printVersion()
