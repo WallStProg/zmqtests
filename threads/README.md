@@ -154,7 +154,7 @@ Waiting...
 $ 
 ```
 
-The issue with dropping initial messages is a [well-known problem with ZeroMQ](https://github.com/zeromq/libzmq/issues/2759) when PUB sockets connect to SUB sockets.  
+The issue with dropping initial messages is a [well-known problem with ZeroMQ](https://github.com/zeromq/libzmq/issues/2267) when PUB sockets connect to SUB sockets.  
 
 Unfortunately, the recommended work-around (inserting `zmq_poll` calls after connects and sends) only works up to a point.  From the various issues and email threads, it appears that the `zmq_poll` must be issued on the SUB side of the connection, but in "real-world" code that work-around is not practical:
 
