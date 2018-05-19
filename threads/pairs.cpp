@@ -9,6 +9,7 @@
 // tls for control socket
 pthread_key_t  key;
 
+pthread_mutex_t   sendMutex = PTHREAD_MUTEX_INITIALIZER;
 
 // send a command to the control socket
 void sendCommand(void* context, zmqControlMsg* msg, int msgSize)
@@ -21,6 +22,10 @@ void sendCommand(void* context, zmqControlMsg* msg, int msgSize)
       checkVoid(controlPub);
       rc = pthread_setspecific(key, controlPub);
       checkInt(rc);
+   }
+
+   if (mutexFlag) {
+      checkInt(pthread_mutex_lock(&sendMutex));
    }
 
    rc = zmq_connect(controlPub, CONTROL_ENDPOINT);
@@ -38,6 +43,11 @@ void sendCommand(void* context, zmqControlMsg* msg, int msgSize)
 
    rc = zmq_disconnect(controlPub, CONTROL_ENDPOINT);
    checkInt(rc);
+
+   if (mutexFlag) {
+      checkInt(pthread_mutex_unlock(&sendMutex));
+   }
+
 }
 
 

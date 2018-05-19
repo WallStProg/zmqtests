@@ -21,6 +21,7 @@ bool  failed = false;
 bool  dontWaitFlag = false;
 int   linger = 30000;
 int   msgSleep = 0;
+bool  mutexFlag = false;
 
 // max sent/received
 std::map<void*, long> maxControlMsgSent;
@@ -220,6 +221,9 @@ void parseParams(int argc, char** argv)
       else if (!strcmp("-debug", argv[i])) {
          debugFlag = true;
       }
+      else if (!strcmp("-mutex", argv[i])) {
+         mutexFlag = true;
+      }
       else if (!strcmp("-poll", argv[i])) {
          pollFlag = true;
       }
@@ -234,6 +238,9 @@ void parseParams(int argc, char** argv)
    fprintf(stderr, "Inter-message sleep = %d us\n", msgSleep);
    if (pollFlag) {
       fprintf(stderr, "Polling after connect\n");
+   }
+   if (mutexFlag) {
+      fprintf(stderr, "Serializing send w/mutex\n");
    }
    fprintf(stderr, "Sleeping for %ld seconds at shutdown\n", sleepDuration);
 }
