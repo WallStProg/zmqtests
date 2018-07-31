@@ -28,7 +28,7 @@ However, this memory growth does not appear to be a leak per-se, since running u
 You will need to set `ZMQ_ROOT` before building.  The `setenv.sh` script can be modified to set `ZMQ_ROOT` for your environment.
 
 ```
-$  source ../setenv.sh
+$  source ./setenv.sh
 $  cmake . && make clean && make
 CMAKE_CXX_COMPILER=/usr/bin/c++
 CMAKE_CXX_COMPILER_ID=GNU
