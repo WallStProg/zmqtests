@@ -87,6 +87,11 @@ To stop the test, enter Ctrl+C in the terminal session, then:
 
     killall -9 repeat.sh proxy peer
 
+It's pretty tricky finding valgrind in list of processes -- see this (<https://github.com/acg/psmisc/issues/1>) for more.  So, if running w/valgrind you may need to do something like this:
+
+    killall peer proxy repeat.sh memcheck-amd64-linux
+    
+    
 ## Results
 When run with valgrind's massif tool, the program produces output similar to the following:
 

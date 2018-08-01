@@ -31,7 +31,7 @@ int main (int argc, char** argv)
    // bind sub and get endpoint
    void* frontend = zmq_socket(theContext, ZMQ_XSUB);
    zmq_bind (frontend, "tcp://127.0.0.1:*");
-   char subEndpoint[ZMQ_MAX_ENDPOINT_LENGTH];
+   char subEndpoint[ZMQ_MAX_ENDPOINT_LENGTH +1];
    size_t nameSize = sizeof(subEndpoint);
    zmq_getsockopt(frontend, ZMQ_LAST_ENDPOINT, subEndpoint, &nameSize);
 
