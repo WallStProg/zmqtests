@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
+#include <assert.h>
 #include <uuid/uuid.h>
 #include <zmq.h>
 #include <string>
@@ -102,16 +103,19 @@ int main(int argc, char** argv)
                fprintf(stderr, "Connecting data sub to %s\n", msg.endpoint);
                peers[msg.uuid] = msg.endpoint;
                zmq_connect(dataSub, msg.endpoint);
+               // only publish endpoint if msg is not from us
                if (strcmp(msg.uuid, theUuid) != 0) {
                   sendConnectMsg(proxyPub, 'C', theUuid, pubEndpoint);
                }
             }
          }
          else if (msg.command == 'D') {
+            // disconnect msg from peer (possibly us)
             if (it != peers.end()) {
                fprintf(stderr, "Disconnecting data sub from %s\n", msg.endpoint);
                peers.erase(it);
-               zmq_disconnect(dataSub, msg.endpoint);
+               int rc = zmq_disconnect(dataSub, msg.endpoint);
+               assert(rc == 0);
                // if we got our own disconnect msg, quit
                if (strcmp(msg.uuid, theUuid) == 0) {
                   break;
@@ -132,6 +136,8 @@ int main(int argc, char** argv)
    zmq_close(proxyPub);
 
    zmq_ctx_term(theContext);
+
+   fprintf(stderr, "Exiting normally\n");
 
    return 0;
 }
