@@ -4,8 +4,8 @@ project (3186)
 
 include(./zeromq.cmake)
 
-add_executable(peer peer.cpp)
+add_executable(peer peer.cpp common.c)
 target_link_libraries(peer uuid)
 
-add_executable(proxy proxy.c)
+add_executable(proxy proxy.c common.c)
 target_link_libraries(proxy uuid)

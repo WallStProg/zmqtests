@@ -11,6 +11,9 @@
 using namespace std;
 #include "common.h"
 
+
+#include "params.c"
+
 void sendConnectMsg(void* socket, const char command, const char* uuid, const char* endpoint)
 {
    connectMsg msg;
@@ -23,13 +26,7 @@ void sendConnectMsg(void* socket, const char command, const char* uuid, const ch
 
 int main(int argc, char** argv)
 {
-   // get params
-   int seconds = 0;
-   for (int i = 1; i < argc; i++) {
-      if (strcasecmp("-s", argv[i]) == 0) {
-         seconds = atoi(argv[++i]);
-      }
-   }
+   parseParams(argc, argv);
 
    // create uuid
    uuid_t temp;
@@ -41,22 +38,29 @@ int main(int argc, char** argv)
 
    // bind data pub
    void* dataPub = zmq_socket(theContext, ZMQ_PUB);
-   zmq_bind(dataPub, "tcp://127.0.0.1:*");
    char pubEndpoint[ZMQ_MAX_ENDPOINT_LENGTH +1];
+   sprintf(pubEndpoint, "tcp://127.0.0.1:%d", port);
+   CALL_INT_FUNC(zmq_bind(dataPub, pubEndpoint));
    size_t nameSize = sizeof(pubEndpoint);
-   zmq_getsockopt(dataPub, ZMQ_LAST_ENDPOINT, pubEndpoint, &nameSize);
+   CALL_INT_FUNC(zmq_getsockopt(dataPub, ZMQ_LAST_ENDPOINT, pubEndpoint, &nameSize));
 
    // create proxy pub
    void* proxyPub = zmq_socket(theContext, ZMQ_PUB);
 
    // connect to proxy sub
    void* proxySub = zmq_socket(theContext, ZMQ_SUB);
-   zmq_setsockopt(proxySub, ZMQ_SUBSCRIBE, "", 0);
-   zmq_connect(proxySub, "tcp://127.0.0.1:5555");
+   CALL_INT_FUNC(zmq_setsockopt(proxySub, ZMQ_SUBSCRIBE, "", 0));
+   CALL_INT_FUNC(zmq_connect(proxySub, "tcp://127.0.0.1:5555"));
 
    // create data sub
    void* dataSub = zmq_socket(theContext, ZMQ_SUB);
-   zmq_setsockopt(dataSub, ZMQ_SUBSCRIBE, "", 0);
+   if (disableReconnect == 1)  {
+      log_msg("Disabling reconnect on dataSub");
+      int reconnectInterval = -1;
+      CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_RECONNECT_IVL, &reconnectInterval, sizeof(reconnectInterval)));
+   }
+
+   CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_SUBSCRIBE, "", 0));
 
    typedef map<string, string> _peers;
    _peers peers;
@@ -77,7 +81,15 @@ int main(int argc, char** argv)
          { dataSub,  0, ZMQ_POLLIN , 0}
       };
 
-      int rc = zmq_poll(pollitems, 2, 1000);
+      CALL_INT_FUNC(zmq_poll(pollitems, 2, 1000));
+
+      // doesn't work -- see https://github.com/zeromq/libzmq/issues/1256#issuecomment-64212673
+      if (fix1256 == 1) {
+         log_msg("Calling zmq_getsockopt w/ZMQ_EVENTS");
+         size_t fd_size = sizeof(uint32_t);
+         uint32_t fd;
+         zmq_getsockopt (pollitems[1].socket, ZMQ_EVENTS, &fd, &fd_size);
+      }
 
       // keep sending a connect msg until we connect to our own pub
       if (peers.find(theUuid) == peers.end()) {
@@ -86,23 +98,23 @@ int main(int argc, char** argv)
 
       if (pollitems[0].revents & ZMQ_POLLIN) {
          connectMsg msg;
-         zmq_recv(proxySub, &msg, sizeof(msg), 0);
+         CALL_INT_FUNC(zmq_recv(proxySub, &msg, sizeof(msg), 0));
 
-         fprintf(stderr, "Got %c from %s with endpoint %s\n", msg.command, msg.uuid, msg.endpoint);
+         log_msg("Got %c from %s with endpoint %s\n", msg.command, msg.uuid, msg.endpoint);
 
          _peers::iterator it = peers.find(msg.uuid);
 
          if (msg.command == 'W') {
             // welcome msg from proxy
-            fprintf(stderr, "Connecting proxy pub to: %s\n", msg.endpoint);
-            zmq_connect(proxyPub, msg.endpoint);
+            log_msg("Connecting proxy pub to: %s\n", msg.endpoint);
+            CALL_INT_FUNC(zmq_connect(proxyPub, msg.endpoint));
          }
          else if (msg.command == 'C') {
             // connect msg from peer (possibly us)
             if (it == peers.end()) {
-               fprintf(stderr, "Connecting data sub to %s\n", msg.endpoint);
+               log_msg("Connecting data sub to %s\n", msg.endpoint);
                peers[msg.uuid] = msg.endpoint;
-               zmq_connect(dataSub, msg.endpoint);
+               CALL_INT_FUNC(zmq_connect(dataSub, msg.endpoint));
                // only publish endpoint if msg is not from us
                if (strcmp(msg.uuid, theUuid) != 0) {
                   sendConnectMsg(proxyPub, 'C', theUuid, pubEndpoint);
@@ -112,13 +124,19 @@ int main(int argc, char** argv)
          else if (msg.command == 'D') {
             // disconnect msg from peer (possibly us)
             if (it != peers.end()) {
-               fprintf(stderr, "Disconnecting data sub from %s\n", msg.endpoint);
+               log_msg("Disconnecting data sub from %s", msg.endpoint);
                peers.erase(it);
-               int rc = zmq_disconnect(dataSub, msg.endpoint);
-               assert(rc == 0);
+               CALL_INT_FUNC(zmq_disconnect(dataSub, msg.endpoint));
+
                // if we got our own disconnect msg, quit
                if (strcmp(msg.uuid, theUuid) == 0) {
                   break;
+               }
+
+               if (sendAfterDisconnect == 1) {
+                  // send dummy message to PUB socket to force cleanup
+                  log_msg("Sending dummy msg on dataPub");
+                  CALL_INT_FUNC(zmq_send(dataPub, NULL, 0, ZMQ_DONTWAIT));
                }
             }
          }
@@ -126,18 +144,42 @@ int main(int argc, char** argv)
 
       if (pollitems[1].revents & ZMQ_POLLIN) {
          dummyMsg dummyMsg;
-         zmq_recv(dataSub, &dummyMsg, sizeof(dummyMsg), 0);
+         CALL_INT_FUNC(zmq_recv(dataSub, &dummyMsg, sizeof(dummyMsg), 0));
       }
    }
 
-   zmq_close(dataSub);
-   zmq_close(proxySub);
-   zmq_close(dataPub);
-   zmq_close(proxyPub);
+   if (sleepAtExit > 0) {
+      log_msg("Sleeping for %d seconds", sleepAtExit);
+      usleep(sleepAtExit*ONE_MILLION);
+   }
 
-   zmq_ctx_term(theContext);
 
-   fprintf(stderr, "Exiting normally\n");
+
+   CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_LINGER, &linger, sizeof(linger)));
+   CALL_INT_FUNC(zmq_close(dataSub));
+
+   CALL_INT_FUNC(zmq_setsockopt(proxySub, ZMQ_LINGER, &linger, sizeof(linger)));
+   CALL_INT_FUNC(zmq_close(proxySub));
+
+   CALL_INT_FUNC(zmq_setsockopt(dataPub, ZMQ_LINGER, &linger, sizeof(linger)));
+   CALL_INT_FUNC(zmq_close(dataPub));
+
+   CALL_INT_FUNC(zmq_setsockopt(proxyPub, ZMQ_LINGER, &linger, sizeof(linger)));
+   CALL_INT_FUNC(zmq_close(proxyPub));
+
+   if (sleepAtExit > 0) {
+      log_msg("Sleeping for %d seconds", sleepAtExit);
+      usleep(sleepAtExit*ONE_MILLION);
+   }
+
+   CALL_INT_FUNC(zmq_ctx_term(theContext));
+
+   if (sleepAtExit > 0) {
+      log_msg("Sleeping for %d seconds", sleepAtExit);
+      usleep(sleepAtExit*ONE_MILLION);
+   }
+
+   log_msg("Exiting normally\n");
 
    return 0;
 }

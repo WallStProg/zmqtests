@@ -3,6 +3,8 @@
 
 #include <assert.h>
 
+#define     ONE_MILLION                      1000000
+
 #define     ZMQ_MAX_ENDPOINT_LENGTH          256
 #define     UUID_STRING_SIZE                 36
 
@@ -17,20 +19,29 @@ typedef struct dummyMsg {
    char     body[256];
 } dummyMsg;
 
+
+#ifdef __cplusplus
+extern "C" void log_msg(const char *format, ...);
+#else
+void log_msg(const char *format, ...);
+#endif
+
+
+#define CALL_INT_FUNC(x)                                                             \
+   do {                                                                              \
+      int rc = (x);                                                                  \
+      if (rc < 0) {                                                                  \
+         log_msg("Error %d(%s)", errno, zmq_strerror(errno));                        \
+      }                                                                              \
+   } while(0)
+
+
 void checkVoid(void* x)
 {
    if (x == 0) {
-      fprintf(stderr, "\nError %d (%s)\n", errno, zmq_strerror(errno));
-      assert(0);
+      log_msg("Error %d(%s)", errno, zmq_strerror(errno));                        \
    }
 }
 
 
-void checkInt(int x)
-{
-   if (x < 0) {
-      fprintf(stderr, "\nError %d (%s)\n", errno, zmq_strerror(errno));
-      assert(0);
-   }
-}
 #endif

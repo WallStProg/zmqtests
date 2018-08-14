@@ -8,7 +8,8 @@ ${PREFIX} ./peer > peer.out 2>&1 &
 
 # start the peers that come and go
 for i in `seq 1 5`; do
-   ./repeat.sh ./peer -s 2 > peer${i}.out 2>&1 &
+   rm -f peer${i}.out
+   ./repeat.sh ./peer $@ > peer${i}.out 2>&1 &
 done
 
 # monitor the main peer
