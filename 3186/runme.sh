@@ -4,7 +4,7 @@
 ./proxy > proxy.out 2>&1 &
 
 # start the "main" peer, using ${PREFIX} from environment (e.g., for valgrind)
-${PREFIX} ./peer > peer.out 2>&1 &
+${PREFIX} ./peer > peer0.out 2>&1 &
 
 # start the peers that come and go
 for i in `seq 1 5`; do
