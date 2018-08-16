@@ -13,4 +13,4 @@ for i in `seq 1 5`; do
 done
 
 # monitor the main peer
-top -c -p $(pgrep -d',' -f -o "peer")
+top -c -p $(pgrep -d',' -o "peer")
