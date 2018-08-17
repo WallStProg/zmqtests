@@ -59,7 +59,6 @@ int main(int argc, char** argv)
       int reconnectInterval = -1;
       CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_RECONNECT_IVL, &reconnectInterval, sizeof(reconnectInterval)));
    }
-
    CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_SUBSCRIBE, "", 0));
 
    typedef map<string, string> _peers;
@@ -127,6 +126,7 @@ int main(int argc, char** argv)
                log_msg("Disconnecting data sub from %s", msg.endpoint);
                peers.erase(it);
                CALL_INT_FUNC(zmq_disconnect(dataSub, msg.endpoint));
+               CALL_INT_FUNC(kickSocket(dataPub));
 
                // if we got our own disconnect msg, quit
                if (strcmp(msg.uuid, theUuid) == 0) {
@@ -156,15 +156,23 @@ int main(int argc, char** argv)
 
 
    CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_LINGER, &linger, sizeof(linger)));
+   //zmq_pollitem_t pollDataSub [] = { { dataSub, 0, ZMQ_POLLIN , 0} };
+   //CALL_INT_FUNC(zmq_poll(pollDataSub, 1, 1));
    CALL_INT_FUNC(zmq_close(dataSub));
 
    CALL_INT_FUNC(zmq_setsockopt(proxySub, ZMQ_LINGER, &linger, sizeof(linger)));
+   //zmq_pollitem_t pollProxySub [] = { { proxySub, 0, ZMQ_POLLIN , 0} };
+   //CALL_INT_FUNC(zmq_poll(pollProxySub, 1, 1));
    CALL_INT_FUNC(zmq_close(proxySub));
 
    CALL_INT_FUNC(zmq_setsockopt(dataPub, ZMQ_LINGER, &linger, sizeof(linger)));
+   //zmq_pollitem_t pollDataPub [] = { { dataPub, 0, ZMQ_POLLIN , 0} };
+   //CALL_INT_FUNC(zmq_poll(pollDataPub, 1, 1));
    CALL_INT_FUNC(zmq_close(dataPub));
 
    CALL_INT_FUNC(zmq_setsockopt(proxyPub, ZMQ_LINGER, &linger, sizeof(linger)));
+   //zmq_pollitem_t pollProxyPub [] = { { proxyPub, 0, ZMQ_POLLIN , 0} };
+   //CALL_INT_FUNC(zmq_poll(pollProxyPub, 1, 1));
    CALL_INT_FUNC(zmq_close(proxyPub));
 
    if (sleepAtExit > 0) {

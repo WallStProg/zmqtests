@@ -4,6 +4,14 @@
 #include <memory.h>
 #include <sys/time.h>
 
+#include "common.h"
+
+int kickSocket(void* socket)
+{
+   zmq_pollitem_t poll_items [] = { {socket, 0, ZMQ_POLLIN | ZMQ_POLLOUT , 0} };
+   return zmq_poll(poll_items, 1, 1);
+}
+
 
 const char* getTimestamp(char *buffer, int   bufferLength)
 {

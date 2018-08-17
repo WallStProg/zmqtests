@@ -3,6 +3,8 @@
 
 #include <assert.h>
 
+#include <zmq.h>
+
 #define     ONE_MILLION                      1000000
 
 #define     ZMQ_MAX_ENDPOINT_LENGTH          256
@@ -20,10 +22,17 @@ typedef struct dummyMsg {
 } dummyMsg;
 
 
+
+
 #ifdef __cplusplus
-extern "C" void log_msg(const char *format, ...);
-#else
-void log_msg(const char *format, ...);
+extern "C" {
+#endif
+
+   void log_msg(const char *format, ...);
+   int kickSocket(void* socket);
+
+#ifdef __cplusplus
+}
 #endif
 
 
@@ -34,14 +43,6 @@ void log_msg(const char *format, ...);
          log_msg("Error %d(%s)", errno, zmq_strerror(errno));                        \
       }                                                                              \
    } while(0)
-
-
-void checkVoid(void* x)
-{
-   if (x == 0) {
-      log_msg("Error %d(%s)", errno, zmq_strerror(errno));                        \
-   }
-}
 
 
 #endif
