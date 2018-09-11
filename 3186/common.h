@@ -30,6 +30,7 @@ extern "C" {
 
    void log_msg(const char *format, ...);
    int kickSocket(void* socket);
+   int kickSocket2(void* socket);
 
 #ifdef __cplusplus
 }

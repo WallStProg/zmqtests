@@ -7,6 +7,11 @@ int disableReconnect = 0;
 int fix1256 = 0;
 int sendAfterDisconnect = 0;
 int linger = 0;
+int immediateExit = 0;
+int duplicateDisconnect = 0;
+int pollAfterDisconnect = 0;
+int longLived = 0;
+int earlyLinger = 0;
 
 void parseParams(int argc, char** argv)
 {
@@ -35,9 +40,29 @@ void parseParams(int argc, char** argv)
          sendAfterDisconnect = 1;
          log_msg("Param:sendAfterDisconnect=%d", sendAfterDisconnect);
       }
+      if (strncasecmp("-immediate-exit", argv[i], strlen(argv[i])) == 0) {
+         immediateExit = 1;
+         log_msg("Param:immediateExit=%d", immediateExit);
+      }
+      if (strncasecmp("-duplicate-disconnect", argv[i], strlen(argv[i])) == 0) {
+         duplicateDisconnect = 1;
+         log_msg("Param:duplicateDisconnect=%d", duplicateDisconnect);
+      }
       if (strncasecmp("-linger", argv[i], strlen(argv[i])) == 0) {
          linger = atoi(argv[++i]);
          log_msg("Param:linger=%d", linger);
+      }
+      if (strncasecmp("-poll-after-disconnect", argv[i], strlen(argv[i])) == 0) {
+         pollAfterDisconnect = 1;
+         log_msg("Param:pollAfterDisconnect=%d", pollAfterDisconnect);
+      }
+      if (strncasecmp("-long-lived", argv[i], strlen(argv[i])) == 0) {
+         longLived = 1;
+         log_msg("Param:longLived=%d", longLived);
+      }
+      if (strncasecmp("-early-linger", argv[i], strlen(argv[i])) == 0) {
+         earlyLinger = 1;
+         log_msg("Param:earlyLinger=%d", earlyLinger);
       }
    }
 }

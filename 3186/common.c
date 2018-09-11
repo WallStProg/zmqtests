@@ -12,18 +12,23 @@ int kickSocket(void* socket)
    return zmq_poll(poll_items, 1, 1);
 }
 
-
-const char* getTimestamp(char *buffer, int   bufferLength)
+int kickSocket2(void* socket)
 {
+   uint32_t fd;
+   size_t fd_size = sizeof(fd);
+   CALL_INT_FUNC(zmq_getsockopt (socket, ZMQ_EVENTS, &fd, &fd_size));
+}
+
+const char* getTimestamp()
+{
+   static __thread char localBuf[64];
+
    struct timeval tv;
    gettimeofday(&tv, NULL);
    struct tm result;
    struct tm *t = localtime_r(&tv.tv_sec, &result);
-   char localBuf[16];
-   sprintf(localBuf, "%02d:%02d:%02d.%06d", t->tm_hour, t->tm_min, t->tm_sec, tv.tv_usec);
-
-   memcpy(buffer, localBuf, bufferLength);
-   return buffer;
+   sprintf(localBuf, "%02d:%02d:%02d.%06ld", t->tm_hour, t->tm_min, t->tm_sec, tv.tv_usec);
+   return localBuf;
 }
 
 
@@ -42,8 +47,8 @@ void log_msg(const char *format, ...)
       va_end(ap);
    }
 
-   char buf[16+1];
-   fprintf(stderr, "%s\t%s\n", getTimestamp(buf, sizeof(buf)), temp);
+   char buf[MAX_LOG_MSG_SIZE];
+   fprintf(stderr, "%s\t%s\n", getTimestamp(), temp);
 }
 #ifdef __cplusplus
 }
