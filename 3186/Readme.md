@@ -221,9 +221,7 @@ Thread 1 (Thread 0x7fec415627a0 (LWP 8310)):
 
 ```
 
-This demonstrates that the process is stuck in `zmq_ctx_term`.  This shows three threads: the application thread, the reaper thread and the IO thread.
-
-If you debug the process you will find that INSERT ADDL INFO FROM MAREK
+This demonstrates that the process is stuck in `zmq_ctx_term`, and shows three threads: the application thread, the reaper thread and the IO thread.
 
 To confirm that setting linger at socket creation time avoids the race condition, and thus avoids the hang in `zmq_ctx_term`:
 
