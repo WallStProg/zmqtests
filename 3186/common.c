@@ -16,7 +16,7 @@ int kickSocket2(void* socket)
 {
    uint32_t fd;
    size_t fd_size = sizeof(fd);
-   CALL_INT_FUNC(zmq_getsockopt (socket, ZMQ_EVENTS, &fd, &fd_size));
+   return zmq_getsockopt(socket, ZMQ_EVENTS, &fd, &fd_size);
 }
 
 const char* getTimestamp()
@@ -27,7 +27,7 @@ const char* getTimestamp()
    gettimeofday(&tv, NULL);
    struct tm result;
    struct tm *t = localtime_r(&tv.tv_sec, &result);
-   sprintf(localBuf, "%02d:%02d:%02d.%06ld", t->tm_hour, t->tm_min, t->tm_sec, tv.tv_usec);
+   sprintf(localBuf, "%02d:%02d:%02d.%06d", t->tm_hour, t->tm_min, t->tm_sec, tv.tv_usec);
    return localBuf;
 }
 

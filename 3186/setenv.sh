@@ -1,7 +1,21 @@
 #!/bin/bash
 
-# change this to reflect location of ZeroMQ
-export ZMQ_ROOT=$HOME/install/libzmq/4.2.3/dev
+
+if [[ ${OSTYPE} == *darwin* ]]; then
+   # on Mac, assume zeromq was installed w/"brew install zeromq"
+   # Note: also need "brew install ossp-uuid"
+   export ZMQ_ROOT=/usr/local/Cellar/zeromq/4.2.5
+elif [[ ${OSTYPE} == *linux* ]]; then
+   # change this to reflect location of ZeroMQ
+   # NOTE: below assumes build from source -- have been unable to find a reliable install
+   # for CentOS 6/7
+   export ZMQ_ROOT=/build/share/libzmq/4.2.5
+   #export ZMQ_ROOT=$HOME/install/libzmq/4.2.3/dev
+   #export ZMQ_ROOT=/usr
+else
+   echo "Unknown OS!"
+   exit 1
+fi
 
 # TSAN
 if [[ ${BUILD_TYPE} == "tsan" ]];then
