@@ -20,26 +20,7 @@ When a process starts:
 You will need to set `ZMQ_ROOT` before building.  The `setenv.sh` script can be modified to set `ZMQ_ROOT` for your environment.
 
 ```
-$  source ./setenv.sh
-$  cmake . && make clean && make
-CMAKE_CXX_COMPILER=/usr/bin/c++
-CMAKE_CXX_COMPILER_ID=GNU
--- Configuring done
--- Generating done
--- Build files have been written to: /home/btorpey/work/zmqtests/3186
-[ 50%] Building CXX object CMakeFiles/peer.dir/peer.cpp.o
-Linking CXX executable peer
-[ 50%] Built target peer
-[100%] Building C object CMakeFiles/proxy.dir/proxy.c.o
-Linking C executable proxy
-[100%] Built target proxy
-$  
-```
-
-Or, you can supply `ZMQ_ROOT` on the cmake command line:
-
-```
-$  cmake -DZMQ_ROOT=$HOME/install/libzmq/4.2.3/dev . && make clean && make
+$  ./build.sh
 CMAKE_CXX_COMPILER=/usr/bin/c++
 CMAKE_CXX_COMPILER_ID=GNU
 -- Configuring done
@@ -72,7 +53,7 @@ You can use the provided `runme.sh` script to start up a typical session.  This 
 To reproduce the problem:
 
 ```
-./runme.sh -seconds 2
+./run.sh -seconds 2
 ```
 
 This will start a proxy, a long-lived peer, and a number of additional peer processes that will run for two seconds, disconnect, and restart.
@@ -94,11 +75,11 @@ Swap:  8388604k total,        0k used,  8388604k free,  1515004k cached
 
 To stop the test, enter Ctrl+C in the terminal session, then:
 
-    killall -9 repeat.sh proxy peer
+    ./stop.sh
 
-If running under valgrind, it can be pretty tricky finding valgrind in list of processes -- see this (<https://github.com/acg/psmisc/issues/1>) for more.  So, if running w/valgrind you may need to do something like this:
+If running under valgrind, it can be pretty tricky finding valgrind in list of processes -- see this (<https://github.com/acg/psmisc/issues/1>) for more.  So, if running w/valgrind you may alos need to do something like this:
 
-    killall peer proxy repeat.sh memcheck-amd64-linux
+    killall memcheck-amd64-linux
     
     
 ### Results
@@ -168,7 +149,7 @@ This behavior seems to indicate that:
 To reproduce the hang problem:
 
 ```
-./runme.sh -send -seconds 2
+./run.sh -send -seconds 2
 ```
 
 You can monitor the progress of the short-lived peer processes by tailing the log files:
@@ -226,7 +207,7 @@ This demonstrates that the process is stuck in `zmq_ctx_term`, and shows three t
 To confirm that setting linger at socket creation time avoids the race condition, and thus avoids the hang in `zmq_ctx_term`:
 
 ```
-./runme.sh -send -seconds 2 -early
+./run.sh -send -seconds 2 -early
 ```
 
 So, to summarize, we have two problems:
