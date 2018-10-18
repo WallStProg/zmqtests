@@ -27,7 +27,7 @@ fi
 # ASAN
 if [[ ${BUILD_TYPE} == "asan" ]];then
    export ZMQ_ROOT=$HOME/install/libzmq/4.2.3/asan
-   export LSAN_LOGDIR=$HOME/asan
-   export ASAN_OPTIONS="abort_on_error=1:verbosity=1:debug=1:malloc_context_size=256:detect_stack_use_after_return=1:allow_user_segv_handler=1:handle_segv=0:fast_unwind_on_malloc=0:check_initialization_order=1:detect_odr_violation=1:use_odr_indicator=1:halt_on_error=1"
+   export ASAN_LOGDIR=$HOME/asan
+   export ASAN_OPTIONS="log_path=${ASAN_LOGDIR}/asan:abort_on_error=1:verbosity=0:debug=1:malloc_context_size=256:detect_stack_use_after_return=1:allow_user_segv_handler=1:handle_segv=0:fast_unwind_on_malloc=0:check_initialization_order=1:detect_odr_violation=1:use_odr_indicator=1:halt_on_error=1"
    export LSAN_OPTIONS=":detect_leaks=0"
 fi

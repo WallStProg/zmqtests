@@ -9,7 +9,9 @@
 #include <string>
 #include <map>
 using namespace std;
+
 #include "common.h"
+#include "monitor.h"
 
 
 #include "params.c"
@@ -39,10 +41,20 @@ int main(int argc, char** argv)
 
    void* theContext = zmq_ctx_new();
 
+
+   if (socketMonitor == 1) {
+      int rc = startMonitor(theContext);
+      assert(rc == 0);
+   }
+
+
    // bind data pub
    void* dataPub = zmq_socket(theContext, ZMQ_PUB);
    if (earlyLinger == 1) {
       CALL_INT_FUNC(zmq_setsockopt(dataPub, ZMQ_LINGER, &linger, sizeof(linger)));
+   }
+   if (socketMonitor == 1) {
+      CALL_INT_FUNC(zmq_socket_monitor(dataPub, "inproc://dataPub", ZMQ_EVENT_ALL));
    }
 
    char pubEndpoint[ZMQ_MAX_ENDPOINT_LENGTH +1];
@@ -56,11 +68,17 @@ int main(int argc, char** argv)
    if (earlyLinger == 1) {
       CALL_INT_FUNC(zmq_setsockopt(proxyPub, ZMQ_LINGER, &linger, sizeof(linger)));
    }
+   if (socketMonitor == 1) {
+      CALL_INT_FUNC(zmq_socket_monitor(proxyPub, "inproc://proxyPub", ZMQ_EVENT_ALL));
+   }
 
    // connect to proxy sub
    void* proxySub = zmq_socket(theContext, ZMQ_SUB);
    if (earlyLinger == 1) {
       CALL_INT_FUNC(zmq_setsockopt(proxySub, ZMQ_LINGER, &linger, sizeof(linger)));
+   }
+   if (socketMonitor == 1) {
+      CALL_INT_FUNC(zmq_socket_monitor(proxySub, "inproc://proxySub", ZMQ_EVENT_ALL));
    }
 
    CALL_INT_FUNC(zmq_setsockopt(proxySub, ZMQ_SUBSCRIBE, "", 0));
@@ -70,6 +88,9 @@ int main(int argc, char** argv)
    void* dataSub = zmq_socket(theContext, ZMQ_SUB);
    if (earlyLinger == 1) {
       CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_LINGER, &linger, sizeof(linger)));
+   }
+   if (socketMonitor == 1) {
+      CALL_INT_FUNC(zmq_socket_monitor(dataSub, "inproc://dataSub", ZMQ_EVENT_ALL));
    }
 
    if (disableReconnect == 1)  {
@@ -175,44 +196,65 @@ int main(int argc, char** argv)
       }
    }
 
-   if (sleepAtExit > 0) {
-      log_msg("Sleeping for %d seconds", sleepAtExit);
-      usleep(sleepAtExit*ONE_MILLION);
-   }
+   // if (sleepAtExit > 0) {
+   //    log_msg("Sleeping for %d seconds", sleepAtExit);
+   //    usleep(sleepAtExit*ONE_MILLION);
+   // }
 
-
-
-   if (earlyLinger == 0) {
-      CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_LINGER, &linger, sizeof(linger)));
-   }
-   CALL_INT_FUNC(zmq_close(dataSub));
-
-   if (earlyLinger == 0) {
-      CALL_INT_FUNC(zmq_setsockopt(proxySub, ZMQ_LINGER, &linger, sizeof(linger)));
-   }
-   CALL_INT_FUNC(zmq_close(proxySub));
 
    if (earlyLinger == 0) {
       CALL_INT_FUNC(zmq_setsockopt(dataPub, ZMQ_LINGER, &linger, sizeof(linger)));
    }
+   if (socketMonitor == 1) {
+      int rc = zmq_socket_monitor(dataPub, NULL, ZMQ_EVENT_ALL);
+      assert(rc == 0);
+   }
    CALL_INT_FUNC(zmq_close(dataPub));
+
+   if (earlyLinger == 0) {
+      CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_LINGER, &linger, sizeof(linger)));
+   }
+   if (socketMonitor == 1) {
+      int rc = zmq_socket_monitor(dataSub, NULL, ZMQ_EVENT_ALL);
+      assert(rc == 0);
+   }
+   CALL_INT_FUNC(zmq_close(dataSub));
 
    if (earlyLinger == 0) {
       CALL_INT_FUNC(zmq_setsockopt(proxyPub, ZMQ_LINGER, &linger, sizeof(linger)));
    }
+   if (socketMonitor == 1) {
+      int rc = zmq_socket_monitor(proxyPub, NULL, ZMQ_EVENT_ALL);
+      assert(rc == 0);
+   }
    CALL_INT_FUNC(zmq_close(proxyPub));
 
+   if (earlyLinger == 0) {
+      CALL_INT_FUNC(zmq_setsockopt(proxySub, ZMQ_LINGER, &linger, sizeof(linger)));
+   }
+   if (socketMonitor == 1) {
+      int rc = zmq_socket_monitor(proxySub, NULL, ZMQ_EVENT_ALL);
+      assert(rc == 0);
+   }
+   CALL_INT_FUNC(zmq_close(proxySub));
+
+   // if (sleepAtExit > 0) {
+   //    log_msg("Sleeping for %d seconds", sleepAtExit);
+   //    usleep(sleepAtExit*ONE_MILLION);
+   // }
+
+   if (socketMonitor == 1) {
+      int rc = stopMonitor();
+      assert(rc == 0);
+   }
+
    if (sleepAtExit > 0) {
       log_msg("Sleeping for %d seconds", sleepAtExit);
       usleep(sleepAtExit*ONE_MILLION);
    }
 
+   CALL_INT_FUNC(zmq_ctx_shutdown(theContext));
    CALL_INT_FUNC(zmq_ctx_term(theContext));
-
-   if (sleepAtExit > 0) {
-      log_msg("Sleeping for %d seconds", sleepAtExit);
-      usleep(sleepAtExit*ONE_MILLION);
-   }
 
    log_msg("Exiting normally\n");
 

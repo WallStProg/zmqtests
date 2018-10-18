@@ -12,6 +12,7 @@ int duplicateDisconnect = 0;
 int pollAfterDisconnect = 0;
 int longLived = 0;
 int earlyLinger = 0;
+int socketMonitor = 0;
 
 void parseParams(int argc, char** argv)
 {
@@ -63,6 +64,10 @@ void parseParams(int argc, char** argv)
       if (strncasecmp("-early-linger", argv[i], strlen(argv[i])) == 0) {
          earlyLinger = 1;
          log_msg("Param:earlyLinger=%d", earlyLinger);
+      }
+      if (strncasecmp("-monitor-sockets", argv[i], strlen(argv[i])) == 0) {
+         socketMonitor = 1;
+         log_msg("Param:socketMonitor=%d", socketMonitor);
       }
    }
 }
