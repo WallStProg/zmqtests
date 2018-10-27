@@ -9,7 +9,7 @@ nohup ./proxy > proxy.out 2>&1 &
 nohup ${PREFIX} ./peer -long-lived $@ > peer0.out 2>&1 &
 
 # start the peers that come and go
-for i in `seq 1 5`; do
+for i in `seq 1 50`; do
    rm -f peer${i}.out
    nohup ./repeat ./peer $@ > peer${i}.out 2>&1 &
 done
