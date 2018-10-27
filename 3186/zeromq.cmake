@@ -1,5 +1,3 @@
-
-
 # create compilation db for use w/various tools
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -31,8 +29,6 @@ set(ZMQ_CFLAGS "-I ${ZMQ_INCDIR} -I ../")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ZMQ_CFLAGS}")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${ZMQ_CFLAGS}")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${ZMQ_LDFLAGS} ${ZMQ_LDLIBS}")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}  -Wl,-rpath,${ZMQ_LIBDIR}")
 link_directories(${ZMQ_LIBDIR})
 link_libraries(zmq)
 
