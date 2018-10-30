@@ -53,7 +53,7 @@ fi
 cd repo; git checkout tags/v${PROJECT_VERSION} --force ; cd -
 
 # copy over mods
-cp -frp mods/* repo
+cp -frpv mods/* repo
 
 # delete old build
 rm -rf build

@@ -53,7 +53,7 @@ fi
 cd repo; git checkout master; cd -
 
 # copy over mods
-cp -frp mods/* repo
+cp -frpv mods/* repo
 
 # delete old build
 rm -rf build
