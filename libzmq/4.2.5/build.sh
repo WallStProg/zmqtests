@@ -50,7 +50,7 @@ INSTALL_PREFIX="${INSTALL_BASE}/${PROJECT_NAME}/${PROJECT_VERSION}${SUFFIX}/${BU
 if [[ ! -d repo ]] ; then
    git clone https://github.com/zeromq/libzmq.git repo
 fi
-cd repo; git checkout tags/v${PROJECT_VERSION} --force ; cd -
+cd repo; git pull --force; git checkout tags/v${PROJECT_VERSION} --force ; cd -
 
 # copy over mods
 cp -frpv mods/* repo

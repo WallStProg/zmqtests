@@ -50,7 +50,7 @@ INSTALL_PREFIX="${INSTALL_BASE}/${PROJECT_NAME}/${PROJECT_VERSION}${SUFFIX}/${BU
 if [[ ! -d repo ]] ; then
    git clone https://github.com/zeromq/libzmq.git repo
 fi
-cd repo; git checkout master; cd -
+cd repo; git fetch --all; git checkout 9861d16cfcea2ae6457299555aa0bb589ec43135 --force ; cd -
 
 # copy over mods
 cp -frpv mods/* repo
@@ -63,6 +63,9 @@ cd build
 # do the build
 $(which cmake) -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
    -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+   -DENABLE_INTRINSICS=On \
+   -DENABLE_ASAN=On \
+   -DWITH_DOCS=Off \
    -DENABLE_DRAFTS=On \
    -DBUILD_STATIC=Off \
    -DWITH_OPENPGM=Off \
