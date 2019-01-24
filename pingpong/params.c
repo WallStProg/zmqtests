@@ -4,6 +4,7 @@
 int pingPort = 0;
 int pongPort = 0;
 int numRequests = 100000;
+bool pollFlag = false;
 
 void parseParams(int argc, char** argv)
 {
@@ -19,6 +20,10 @@ void parseParams(int argc, char** argv)
       if (strncasecmp("-n", argv[i], strlen(argv[i])) == 0) {
          numRequests = atoi(argv[++i]);
          log_msg("Param:n=%d", numRequests);
+      }
+      if (strncasecmp("-poll", argv[i], strlen(argv[i])) == 0) {
+         pollFlag = true;
+         log_msg("Param:poll=%d", pollFlag);
       }
    }
 }
