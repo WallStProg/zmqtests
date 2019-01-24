@@ -14,13 +14,13 @@ int main(int argc, char** argv)
    void* theContext = zmq_ctx_new();
 
    // setup monitor sockets
-   void* monitorSub = zmq_socket(theContext, ZMQ_SERVER);
-   assert(monitorSub);
-   CALL_INT_FUNC(zmq_bind(monitorSub, "inproc://monitor"));
+   void* controlSub = zmq_socket(theContext, ZMQ_SERVER);
+   assert(controlSub);
+   CALL_INT_FUNC(zmq_bind(controlSub, "inproc://monitor"));
 
-   void* monitorPub = zmq_socket(theContext, ZMQ_CLIENT);
-   assert(monitorPub);
-   CALL_INT_FUNC(zmq_connect(monitorPub, "inproc://monitor"));
+   void* controlPub = zmq_socket(theContext, ZMQ_CLIENT);
+   assert(controlPub);
+   CALL_INT_FUNC(zmq_connect(controlPub, "inproc://monitor"));
 
 
    // bind pub
@@ -54,8 +54,8 @@ int main(int argc, char** argv)
 
       int waitFlag = 0;
       if (pollFlag) {
-         zmq_pollitem_t pollitems[] = { { monitorSub, 0, ZMQ_POLLIN , 0}, { sub, 0, ZMQ_POLLIN , 0} };
-         CALL_INT_FUNC(zmq_poll(pollitems, 2, -1));
+         zmq_pollitem_t pollitems[] = { { sub, 0, ZMQ_POLLIN , 0}, { controlSub, 0, ZMQ_POLLIN , 0} };
+         CALL_INT_FUNC(zmq_poll(pollitems, controlFlag ? 2 :1 , -1));
          waitFlag = ZMQ_DONTWAIT;
       }
       CALL_INT_FUNC(zmq_recv(sub, &requestMsg, sizeof(requestMsg), 0));
@@ -63,8 +63,8 @@ int main(int argc, char** argv)
 
       waitFlag = 0;
       if (pollFlag) {
-         zmq_pollitem_t pollitems[] = { { monitorSub, 0, ZMQ_POLLIN , 0}, { sub, 0, ZMQ_POLLIN , 0} };
-         CALL_INT_FUNC(zmq_poll(pollitems, 2, -1));
+         zmq_pollitem_t pollitems[] = { { sub, 0, ZMQ_POLLIN , 0}, { controlSub, 0, ZMQ_POLLIN , 0} };
+         CALL_INT_FUNC(zmq_poll(pollitems, controlFlag ? 2 : 1, -1));
          waitFlag = ZMQ_DONTWAIT;
       }
       CALL_INT_FUNC(zmq_recv(sub, &requestMsg, sizeof(requestMsg), 0));
@@ -78,8 +78,8 @@ int main(int argc, char** argv)
    CALL_INT_FUNC(zmq_close(pub));
    CALL_INT_FUNC(zmq_close(sub));
 
-   CALL_INT_FUNC(zmq_close(monitorSub));
-   CALL_INT_FUNC(zmq_close(monitorPub));
+   CALL_INT_FUNC(zmq_close(controlSub));
+   CALL_INT_FUNC(zmq_close(controlPub));
 
    CALL_INT_FUNC(zmq_ctx_shutdown(theContext));
    CALL_INT_FUNC(zmq_ctx_term(theContext));

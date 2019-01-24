@@ -1,0 +1,8 @@
+#!/bin/bash -xv
+
+###############################################################################
+# The immediately following definitions are constant for a particular version
+export PROJECT_NAME=libzmq
+export PROJECT_VERSION=4.2.4
+export JIRA_RELEASE=BUS-1778           # release artifact in jira
+

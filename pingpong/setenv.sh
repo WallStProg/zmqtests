@@ -14,8 +14,8 @@ elif [[ ${OSTYPE} == *linux* ]]; then
    # change this to reflect location of ZeroMQ
    # NOTE: below assumes build from source -- have been unable to find a reliable install
    # for CentOS 6/7
-   export ZMQ_ROOT=/build/share/libzmq/${ZMQ_VERSION}/release
-   #export ZMQ_ROOT=$HOME/install/libzmq/${ZMQ_VERSION}/dev
+   #export ZMQ_ROOT=/build/share/libzmq/${ZMQ_VERSION}/release
+   export ZMQ_ROOT=$HOME/install/libzmq/${ZMQ_VERSION}/release
    #export ZMQ_ROOT=/usr
 else
    echo "Unknown OS!"

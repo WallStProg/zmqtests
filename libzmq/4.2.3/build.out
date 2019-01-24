@@ -1,0 +1,963 @@
++ VERBOSE=
++ SUFFIX=
++ getopts :s::b:c:i:v flag
++ case "${flag}" in
++ BUILD_TYPE=release
++ export BUILD_TYPE
++ getopts :s::b:c:i:v flag
++ shift 2
++ [[ release == *san ]]
++ [[ -z release ]]
++ setenv
++++ dirname ./build.sh
+++ cd .
+++ pwd
++ local SCRIPT_DIR=/home/btorpey/work/zmqtests/libzmq/4.2.3
++ local BUILD_TYPE_PARAM
++ [[ -n release ]]
++ BUILD_TYPE_PARAM='-b release'
++ local CONFIG_PARAM
++ [[ -n '' ]]
++ source /home/btorpey/work/zmqtests/libzmq/4.2.3/admin/devenv.sh -b release
+++++ dirname '/home/btorpey/work/zmqtests/libzmq/4.2.3/admin/devenv.sh[0]'
++++ cd /home/btorpey/work/zmqtests/libzmq/4.2.3/admin
++++ pwd
+++ SCRIPT_DIR=/home/btorpey/work/zmqtests/libzmq/4.2.3/admin
+++ source /home/btorpey/work/zmqtests/libzmq/4.2.3/admin/dependencies -b release
++++ export PROJECT_NAME=libzmq
++++ PROJECT_NAME=libzmq
++++ export PROJECT_VERSION=4.2.3
++++ PROJECT_VERSION=4.2.3
++++ export JIRA_RELEASE=BUS-1778
++++ JIRA_RELEASE=BUS-1778
+++ [[ -z '' ]]
+++ export INSTALL_BASE=/home/btorpey/install
+++ INSTALL_BASE=/home/btorpey/install
+++ rc=0
++++ hostname -s
+++ HOST=centos6
+++ [[ -e /home/btorpey/work/zmqtests/libzmq/4.2.3/admin/devenv.btorpey.centos6.sh ]]
+++ [[ -e /home/btorpey/work/zmqtests/libzmq/4.2.3/admin/devenv.btorpey.sh ]]
+++ [[ 0 -ne 255 ]]
+++ source /home/btorpey/work/zmqtests/libzmq/4.2.3/admin/devenv.common.sh
++ [[ -z /home/btorpey/install ]]
++ [[ -z release ]]
++ CMAKE_BUILD_TYPE=Debug
++ [[ release == \r\e\l\e\a\s\e ]]
++ CMAKE_BUILD_TYPE=RelWithDebInfo
++ INSTALL_PREFIX=/home/btorpey/install/libzmq/4.2.3/release
++ [[ -n /home/btorpey/install/libzmq/4.2.3/release ]]
++ [[ -d /home/btorpey/install/libzmq/4.2.3/release ]]
++ [[ ! -d repo ]]
++ git clone https://github.com/zeromq/libzmq.git repo
+Cloning into 'repo'...
++ cd repo
++ git pull --force
+Already up-to-date.
++ git checkout tags/v4.2.3 --force
+Note: checking out 'tags/v4.2.3'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 3226b8e... Finalise changelog for 4.2.3
++ cd -
+/home/btorpey/work/zmqtests/libzmq/4.2.3
++ cp -frpv 'mods/*' repo
+cp: cannot stat `mods/*': No such file or directory
++ rm -rf build
++ mkdir build
++ cd build
+++ which cmake
++ /usr/bin/cmake -DCMAKE_INSTALL_PREFIX=/home/btorpey/install/libzmq/4.2.3/release -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DENABLE_DRAFTS=On -DBUILD_STATIC=Off -DWITH_OPENPGM=Off ../repo
+-- The C compiler identification is GNU 4.8.2
+-- The CXX compiler identification is GNU 4.8.2
+-- Check for working C compiler: /build/share/gcc/4.8.2/bin/gcc
+-- Check for working C compiler: /build/share/gcc/4.8.2/bin/gcc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working CXX compiler: /build/share/gcc/4.8.2/bin/g++
+-- Check for working CXX compiler: /build/share/gcc/4.8.2/bin/g++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Performing Test COMPILER_SUPPORTS_CXX11
+-- Performing Test COMPILER_SUPPORTS_CXX11 - Success
+-- Performing Test COMPILER_SUPPORTS_C11
+-- Performing Test COMPILER_SUPPORTS_C11 - Success
+-- Using tweetnacl for CURVE security
+-- Looking for kqueue
+-- Looking for kqueue - not found
+-- Looking for epoll_create
+-- Looking for epoll_create - found
+-- Looking for epoll_create1
+-- Looking for epoll_create1 - found
+-- Detected epoll polling method
+-- Detected ZMQ Version - 4.2.3
+-- Looking for include file ifaddrs.h
+-- Looking for include file ifaddrs.h - found
+-- Looking for include file windows.h
+-- Looking for include file windows.h - not found
+-- Looking for include file sys/uio.h
+-- Looking for include file sys/uio.h - found
+-- Looking for include file sys/eventfd.h
+-- Looking for include file sys/eventfd.h - found
+-- Checking whether EFD_CLOEXEC is supported
+-- Performing Test ZMQ_HAVE_EVENTFD_CLOEXEC
+-- Performing Test ZMQ_HAVE_EVENTFD_CLOEXEC - Success
+-- Looking for fopen in ws2_32
+-- Looking for fopen in ws2_32 - not found
+-- Looking for fopen in ws2
+-- Looking for fopen in ws2 - not found
+-- Looking for fopen in rpcrt4
+-- Looking for fopen in rpcrt4 - not found
+-- Looking for fopen in iphlpapi
+-- Looking for fopen in iphlpapi - not found
+-- Looking for SO_PEERCRED
+-- Looking for SO_PEERCRED - found
+-- Looking for LOCAL_PEERCRED
+-- Looking for LOCAL_PEERCRED - not found
+-- Looking for include file pthread.h
+-- Looking for include file pthread.h - found
+-- Looking for pthread_create
+-- Looking for pthread_create - not found
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE  
+-- Looking for clock_gettime
+-- Looking for clock_gettime - found
+-- Looking for fork
+-- Looking for fork - found
+-- Looking for gethrtime
+-- Looking for gethrtime - not found
+-- Looking for mkdtemp
+-- Looking for mkdtemp - found
+-- Looking for accept4
+-- Looking for accept4 - found
+-- Performing Test HAVE_FLAG_-Wall
+-- Performing Test HAVE_FLAG_-Wall - Success
+-- Performing Test HAVE_FLAG_-Wextra
+-- Performing Test HAVE_FLAG_-Wextra - Success
+-- Performing Test HAVE_FLAG_-Wno-long-long
+-- Performing Test HAVE_FLAG_-Wno-long-long - Success
+-- Performing Test HAVE_FLAG_-Wno-uninitialized
+-- Performing Test HAVE_FLAG_-Wno-uninitialized - Success
+-- Performing Test HAVE_FLAG_-pedantic
+-- Performing Test HAVE_FLAG_-pedantic - Success
+-- Checking whether SOCK_CLOEXEC is supported
+-- Performing Test ZMQ_HAVE_SOCK_CLOEXEC
+-- Performing Test ZMQ_HAVE_SOCK_CLOEXEC - Success
+-- Checking whether O_CLOEXEC is supported
+-- Performing Test ZMQ_HAVE_O_CLOEXEC
+-- Performing Test ZMQ_HAVE_O_CLOEXEC - Success
+-- Checking whether SO_BINDTODEVICE is supported
+-- Performing Test ZMQ_HAVE_SO_BINDTODEVICE
+-- Performing Test ZMQ_HAVE_SO_BINDTODEVICE - Success
+-- Checking whether SO_KEEPALIVE is supported
+-- Performing Test ZMQ_HAVE_SO_KEEPALIVE
+-- Performing Test ZMQ_HAVE_SO_KEEPALIVE - Success
+-- Checking whether TCP_KEEPCNT is supported
+-- Performing Test ZMQ_HAVE_TCP_KEEPCNT
+-- Performing Test ZMQ_HAVE_TCP_KEEPCNT - Success
+-- Checking whether TCP_KEEPIDLE is supported
+-- Performing Test ZMQ_HAVE_TCP_KEEPIDLE
+-- Performing Test ZMQ_HAVE_TCP_KEEPIDLE - Success
+-- Checking whether TCP_KEEPINTVL is supported
+-- Performing Test ZMQ_HAVE_TCP_KEEPINTVL
+-- Performing Test ZMQ_HAVE_TCP_KEEPINTVL - Success
+-- Checking whether TCP_KEEPALIVE is supported
+-- Performing Test ZMQ_HAVE_TCP_KEEPALIVE
+-- Performing Test ZMQ_HAVE_TCP_KEEPALIVE - Failed
+-- Checking whether TIPC is supported
+-- Performing Test ZMQ_HAVE_TIPC
+-- Performing Test ZMQ_HAVE_TIPC - Failed
+-- Checking pthread_setname signature
+-- Performing Test ZMQ_HAVE_PTHREAD_SETNAME_1
+-- Performing Test ZMQ_HAVE_PTHREAD_SETNAME_1 - Failed
+-- Performing Test ZMQ_HAVE_PTHREAD_SETNAME_2
+-- Performing Test ZMQ_HAVE_PTHREAD_SETNAME_2 - Success
+-- Performing Test ZMQ_HAVE_PTHREAD_SETNAME_3
+-- Performing Test ZMQ_HAVE_PTHREAD_SETNAME_3 - Failed
+-- Performing Test ZMQ_HAVE_PTHREAD_SET_NAME
+-- Performing Test ZMQ_HAVE_PTHREAD_SET_NAME - Failed
+-- Checking pthread_setaffinity signature
+-- Performing Test ZMQ_HAVE_PTHREAD_SETAFFINITY
+-- Performing Test ZMQ_HAVE_PTHREAD_SETAFFINITY - Success
+-- Checking whether getrandom is supported
+-- Performing Test ZMQ_HAVE_GETRANDOM
+-- Performing Test ZMQ_HAVE_GETRANDOM - Failed
+-- Found PythonInterp: /build/share/python/2.7.10/bin/python (found version "2.7.10") 
+-- Found AsciiDoc: /usr/bin/asciidoc  
+CMake Warning (dev) at tests/CMakeLists.txt:216 (message):
+  Test 'test_security_gssapi' is not known to CTest.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/btorpey/work/zmqtests/libzmq/4.2.3/build
++ rc=0
++ [[ 0 != 0 ]]
++ make
+Scanning dependencies of target objects
+[  0%] Building C object CMakeFiles/objects.dir/src/tweetnacl.c.o
+[  1%] Building CXX object CMakeFiles/objects.dir/src/precompiled.cpp.o
+[  1%] Building CXX object CMakeFiles/objects.dir/src/address.cpp.o
+[  2%] Building CXX object CMakeFiles/objects.dir/src/client.cpp.o
+[  2%] Building CXX object CMakeFiles/objects.dir/src/clock.cpp.o
+[  2%] Building CXX object CMakeFiles/objects.dir/src/ctx.cpp.o
+[  3%] Building CXX object CMakeFiles/objects.dir/src/curve_mechanism_base.cpp.o
+[  3%] Building CXX object CMakeFiles/objects.dir/src/curve_client.cpp.o
+[  4%] Building CXX object CMakeFiles/objects.dir/src/curve_server.cpp.o
+[  4%] Building CXX object CMakeFiles/objects.dir/src/dealer.cpp.o
+[  4%] Building CXX object CMakeFiles/objects.dir/src/devpoll.cpp.o
+[  5%] Building CXX object CMakeFiles/objects.dir/src/dgram.cpp.o
+[  5%] Building CXX object CMakeFiles/objects.dir/src/dist.cpp.o
+[  5%] Building CXX object CMakeFiles/objects.dir/src/epoll.cpp.o
+[  6%] Building CXX object CMakeFiles/objects.dir/src/err.cpp.o
+[  6%] Building CXX object CMakeFiles/objects.dir/src/fq.cpp.o
+[  7%] Building CXX object CMakeFiles/objects.dir/src/io_object.cpp.o
+[  7%] Building CXX object CMakeFiles/objects.dir/src/io_thread.cpp.o
+[  7%] Building CXX object CMakeFiles/objects.dir/src/ip.cpp.o
+[  8%] Building CXX object CMakeFiles/objects.dir/src/ipc_address.cpp.o
+[  8%] Building CXX object CMakeFiles/objects.dir/src/ipc_connecter.cpp.o
+[  9%] Building CXX object CMakeFiles/objects.dir/src/ipc_listener.cpp.o
+[  9%] Building CXX object CMakeFiles/objects.dir/src/kqueue.cpp.o
+[  9%] Building CXX object CMakeFiles/objects.dir/src/lb.cpp.o
+[ 10%] Building CXX object CMakeFiles/objects.dir/src/mailbox.cpp.o
+[ 10%] Building CXX object CMakeFiles/objects.dir/src/mailbox_safe.cpp.o
+[ 10%] Building CXX object CMakeFiles/objects.dir/src/mechanism.cpp.o
+[ 11%] Building CXX object CMakeFiles/objects.dir/src/mechanism_base.cpp.o
+[ 11%] Building CXX object CMakeFiles/objects.dir/src/metadata.cpp.o
+[ 12%] Building CXX object CMakeFiles/objects.dir/src/msg.cpp.o
+[ 12%] Building CXX object CMakeFiles/objects.dir/src/mtrie.cpp.o
+[ 12%] Building CXX object CMakeFiles/objects.dir/src/object.cpp.o
+[ 13%] Building CXX object CMakeFiles/objects.dir/src/options.cpp.o
+[ 13%] Building CXX object CMakeFiles/objects.dir/src/own.cpp.o
+[ 14%] Building CXX object CMakeFiles/objects.dir/src/null_mechanism.cpp.o
+[ 14%] Building CXX object CMakeFiles/objects.dir/src/pair.cpp.o
+[ 14%] Building CXX object CMakeFiles/objects.dir/src/pgm_receiver.cpp.o
+[ 15%] Building CXX object CMakeFiles/objects.dir/src/pgm_sender.cpp.o
+[ 15%] Building CXX object CMakeFiles/objects.dir/src/pgm_socket.cpp.o
+[ 16%] Building CXX object CMakeFiles/objects.dir/src/pipe.cpp.o
+[ 16%] Building CXX object CMakeFiles/objects.dir/src/plain_client.cpp.o
+[ 16%] Building CXX object CMakeFiles/objects.dir/src/plain_server.cpp.o
+[ 17%] Building CXX object CMakeFiles/objects.dir/src/poll.cpp.o
+[ 17%] Building CXX object CMakeFiles/objects.dir/src/poller_base.cpp.o
+[ 17%] Building CXX object CMakeFiles/objects.dir/src/pollset.cpp.o
+[ 18%] Building CXX object CMakeFiles/objects.dir/src/proxy.cpp.o
+[ 18%] Building CXX object CMakeFiles/objects.dir/src/pub.cpp.o
+[ 19%] Building CXX object CMakeFiles/objects.dir/src/pull.cpp.o
+[ 19%] Building CXX object CMakeFiles/objects.dir/src/push.cpp.o
+[ 19%] Building CXX object CMakeFiles/objects.dir/src/random.cpp.o
+[ 20%] Building CXX object CMakeFiles/objects.dir/src/raw_encoder.cpp.o
+[ 20%] Building CXX object CMakeFiles/objects.dir/src/raw_decoder.cpp.o
+[ 21%] Building CXX object CMakeFiles/objects.dir/src/reaper.cpp.o
+[ 21%] Building CXX object CMakeFiles/objects.dir/src/rep.cpp.o
+[ 21%] Building CXX object CMakeFiles/objects.dir/src/req.cpp.o
+[ 22%] Building CXX object CMakeFiles/objects.dir/src/router.cpp.o
+[ 22%] Building CXX object CMakeFiles/objects.dir/src/select.cpp.o
+[ 23%] Building CXX object CMakeFiles/objects.dir/src/server.cpp.o
+[ 23%] Building CXX object CMakeFiles/objects.dir/src/session_base.cpp.o
+[ 23%] Building CXX object CMakeFiles/objects.dir/src/signaler.cpp.o
+[ 24%] Building CXX object CMakeFiles/objects.dir/src/socket_base.cpp.o
+[ 24%] Building CXX object CMakeFiles/objects.dir/src/socks.cpp.o
+[ 24%] Building CXX object CMakeFiles/objects.dir/src/socks_connecter.cpp.o
+[ 25%] Building CXX object CMakeFiles/objects.dir/src/stream.cpp.o
+[ 25%] Building CXX object CMakeFiles/objects.dir/src/stream_engine.cpp.o
+[ 26%] Building CXX object CMakeFiles/objects.dir/src/sub.cpp.o
+[ 26%] Building CXX object CMakeFiles/objects.dir/src/tcp.cpp.o
+[ 26%] Building CXX object CMakeFiles/objects.dir/src/tcp_address.cpp.o
+[ 27%] Building CXX object CMakeFiles/objects.dir/src/tcp_connecter.cpp.o
+[ 27%] Building CXX object CMakeFiles/objects.dir/src/tcp_listener.cpp.o
+[ 28%] Building CXX object CMakeFiles/objects.dir/src/thread.cpp.o
+[ 28%] Building CXX object CMakeFiles/objects.dir/src/trie.cpp.o
+[ 28%] Building CXX object CMakeFiles/objects.dir/src/v1_decoder.cpp.o
+[ 29%] Building CXX object CMakeFiles/objects.dir/src/v1_encoder.cpp.o
+[ 29%] Building CXX object CMakeFiles/objects.dir/src/v2_decoder.cpp.o
+[ 29%] Building CXX object CMakeFiles/objects.dir/src/v2_encoder.cpp.o
+[ 30%] Building CXX object CMakeFiles/objects.dir/src/xpub.cpp.o
+[ 30%] Building CXX object CMakeFiles/objects.dir/src/xsub.cpp.o
+[ 31%] Building CXX object CMakeFiles/objects.dir/src/zmq.cpp.o
+[ 31%] Building CXX object CMakeFiles/objects.dir/src/zmq_utils.cpp.o
+[ 31%] Building CXX object CMakeFiles/objects.dir/src/decoder_allocators.cpp.o
+[ 32%] Building CXX object CMakeFiles/objects.dir/src/socket_poller.cpp.o
+[ 32%] Building CXX object CMakeFiles/objects.dir/src/timers.cpp.o
+[ 33%] Building CXX object CMakeFiles/objects.dir/src/radio.cpp.o
+[ 33%] Building CXX object CMakeFiles/objects.dir/src/dish.cpp.o
+[ 33%] Building CXX object CMakeFiles/objects.dir/src/udp_engine.cpp.o
+[ 34%] Building CXX object CMakeFiles/objects.dir/src/udp_address.cpp.o
+[ 34%] Building CXX object CMakeFiles/objects.dir/src/scatter.cpp.o
+[ 35%] Building CXX object CMakeFiles/objects.dir/src/gather.cpp.o
+[ 35%] Building CXX object CMakeFiles/objects.dir/src/zap_client.cpp.o
+[ 35%] Built target objects
+[ 35%] Generating zmq_close.html
+[ 36%] Generating zmq_pgm.html
+[ 36%] Generating zmq_vmci.html
+[ 36%] Generating zmq_inproc.html
+[ 37%] Generating zmq_tcp.html
+[ 37%] Generating zmq_ctx_term.html
+[ 38%] Generating zmq_msg_move.html
+[ 38%] Generating zmq_ctx_new.html
+[ 38%] Generating zmq_plain.html
+[ 39%] Generating zmq_msg_send.html
+[ 39%] Generating zmq_bind.html
+[ 40%] Generating zmq_setsockopt.html
+[ 40%] Generating zmq_poll.html
+[ 40%] Generating zmq_ctx_set.html
+[ 41%] Generating zmq_ipc.html
+[ 41%] Generating zmq_recv.html
+[ 41%] Generating zmq_udp.html
+[ 42%] Generating zmq_ctx_get.html
+[ 42%] Generating zmq_send.html
+[ 43%] Generating zmq_atomic_counter_dec.html
+[ 43%] Generating zmq_term.html
+[ 43%] Generating zmq_atomic_counter_value.html
+[ 44%] Generating zmq_ctx_shutdown.html
+[ 44%] Generating zmq_recvmsg.html
+[ 45%] Generating zmq_unbind.html
+[ 45%] Generating zmq_sendmsg.html
+[ 45%] Generating zmq_atomic_counter_set.html
+[ 46%] Generating zmq_atomic_counter_new.html
+[ 46%] Generating zmq_msg_get.html
+[ 47%] Generating zmq_has.html
+[ 47%] Generating zmq_send_const.html
+[ 47%] Generating zmq_msg_init_data.html
+[ 48%] Generating zmq_msg_set_routing_id.html
+[ 48%] Generating zmq_msg_recv.html
+[ 48%] Generating zmq_getsockopt.html
+[ 49%] Generating zmq_curve.html
+[ 49%] Generating zmq_proxy.html
+[ 50%] Generating zmq_z85_decode.html
+[ 50%] Generating zmq_msg_more.html
+[ 50%] Generating zmq_disconnect.html
+[ 51%] Generating zmq_curve_public.html
+[ 51%] Generating zmq_msg_routing_id.html
+[ 52%] Generating zmq_msg_gets.html
+[ 52%] Generating zmq_msg_init.html
+[ 52%] Generating zmq_msg_close.html
+[ 53%] Generating zmq_errno.html
+[ 53%] Generating zmq_init.html
+[ 53%] Generating zmq_msg_copy.html
+[ 54%] Generating zmq_strerror.html
+[ 54%] Generating zmq_tipc.html
+[ 55%] Generating zmq_proxy_steerable.html
+[ 55%] Generating zmq_version.html
+[ 55%] Generating zmq_z85_encode.html
+[ 56%] Generating zmq_ctx_destroy.html
+[ 56%] Generating zmq_null.html
+[ 57%] Generating zmq.html
+[ 57%] Generating zmq_connect.html
+[ 57%] Generating zmq_socket.html
+[ 58%] Generating zmq_atomic_counter_inc.html
+[ 58%] Generating zmq_socket_monitor.html
+[ 59%] Generating zmq_msg_data.html
+[ 59%] Generating zmq_atomic_counter_destroy.html
+[ 59%] Generating zmq_msg_set.html
+[ 60%] Generating zmq_msg_size.html
+[ 60%] Generating zmq_curve_keypair.html
+[ 60%] Generating zmq_msg_init_size.html
+[ 61%] Generating zmq_gssapi.html
+Scanning dependencies of target libzmq
+Linking CXX shared library lib/libzmq.so
+[ 61%] Built target libzmq
+Scanning dependencies of target inproc_lat
+[ 61%] Building CXX object CMakeFiles/inproc_lat.dir/perf/inproc_lat.cpp.o
+Linking CXX executable bin/inproc_lat
+[ 61%] Built target inproc_lat
+Scanning dependencies of target inproc_thr
+[ 61%] Building CXX object CMakeFiles/inproc_thr.dir/perf/inproc_thr.cpp.o
+Linking CXX executable bin/inproc_thr
+[ 61%] Built target inproc_thr
+Scanning dependencies of target local_lat
+[ 62%] Building CXX object CMakeFiles/local_lat.dir/perf/local_lat.cpp.o
+Linking CXX executable bin/local_lat
+[ 62%] Built target local_lat
+Scanning dependencies of target local_thr
+[ 62%] Building CXX object CMakeFiles/local_thr.dir/perf/local_thr.cpp.o
+Linking CXX executable bin/local_thr
+[ 62%] Built target local_thr
+Scanning dependencies of target remote_lat
+[ 62%] Building CXX object CMakeFiles/remote_lat.dir/perf/remote_lat.cpp.o
+Linking CXX executable bin/remote_lat
+[ 62%] Built target remote_lat
+Scanning dependencies of target remote_thr
+[ 63%] Building CXX object CMakeFiles/remote_thr.dir/perf/remote_thr.cpp.o
+Linking CXX executable bin/remote_thr
+[ 63%] Built target remote_thr
+Scanning dependencies of target test_abstract_ipc
+[ 63%] Building CXX object tests/CMakeFiles/test_abstract_ipc.dir/test_abstract_ipc.cpp.o
+Linking CXX executable ../bin/test_abstract_ipc
+[ 63%] Built target test_abstract_ipc
+Scanning dependencies of target test_ancillaries
+[ 63%] Building CXX object tests/CMakeFiles/test_ancillaries.dir/test_ancillaries.cpp.o
+Linking CXX executable ../bin/test_ancillaries
+[ 63%] Built target test_ancillaries
+Scanning dependencies of target test_atomics
+[ 64%] Building CXX object tests/CMakeFiles/test_atomics.dir/test_atomics.cpp.o
+Linking CXX executable ../bin/test_atomics
+[ 64%] Built target test_atomics
+Scanning dependencies of target test_base85
+[ 64%] Building CXX object tests/CMakeFiles/test_base85.dir/test_base85.cpp.o
+Linking CXX executable ../bin/test_base85
+[ 64%] Built target test_base85
+Scanning dependencies of target test_bind_after_connect_tcp
+[ 65%] Building CXX object tests/CMakeFiles/test_bind_after_connect_tcp.dir/test_bind_after_connect_tcp.cpp.o
+Linking CXX executable ../bin/test_bind_after_connect_tcp
+[ 65%] Built target test_bind_after_connect_tcp
+Scanning dependencies of target test_bind_src_address
+[ 65%] Building CXX object tests/CMakeFiles/test_bind_src_address.dir/test_bind_src_address.cpp.o
+Linking CXX executable ../bin/test_bind_src_address
+[ 65%] Built target test_bind_src_address
+Scanning dependencies of target test_capabilities
+[ 65%] Building CXX object tests/CMakeFiles/test_capabilities.dir/test_capabilities.cpp.o
+Linking CXX executable ../bin/test_capabilities
+[ 65%] Built target test_capabilities
+Scanning dependencies of target test_client_server
+[ 66%] Building CXX object tests/CMakeFiles/test_client_server.dir/test_client_server.cpp.o
+Linking CXX executable ../bin/test_client_server
+[ 66%] Built target test_client_server
+Scanning dependencies of target test_conflate
+[ 66%] Building CXX object tests/CMakeFiles/test_conflate.dir/test_conflate.cpp.o
+Linking CXX executable ../bin/test_conflate
+[ 66%] Built target test_conflate
+Scanning dependencies of target test_connect_resolve
+[ 67%] Building CXX object tests/CMakeFiles/test_connect_resolve.dir/test_connect_resolve.cpp.o
+Linking CXX executable ../bin/test_connect_resolve
+[ 67%] Built target test_connect_resolve
+Scanning dependencies of target test_connect_rid
+[ 67%] Building CXX object tests/CMakeFiles/test_connect_rid.dir/test_connect_rid.cpp.o
+Linking CXX executable ../bin/test_connect_rid
+[ 67%] Built target test_connect_rid
+Scanning dependencies of target test_ctx_destroy
+[ 67%] Building CXX object tests/CMakeFiles/test_ctx_destroy.dir/test_ctx_destroy.cpp.o
+Linking CXX executable ../bin/test_ctx_destroy
+[ 67%] Built target test_ctx_destroy
+Scanning dependencies of target test_ctx_options
+[ 68%] Building CXX object tests/CMakeFiles/test_ctx_options.dir/test_ctx_options.cpp.o
+Linking CXX executable ../bin/test_ctx_options
+[ 68%] Built target test_ctx_options
+Scanning dependencies of target test_dgram
+[ 68%] Building CXX object tests/CMakeFiles/test_dgram.dir/test_dgram.cpp.o
+Linking CXX executable ../bin/test_dgram
+[ 68%] Built target test_dgram
+Scanning dependencies of target test_diffserv
+[ 68%] Building CXX object tests/CMakeFiles/test_diffserv.dir/test_diffserv.cpp.o
+Linking CXX executable ../bin/test_diffserv
+[ 68%] Built target test_diffserv
+Scanning dependencies of target test_disconnect_inproc
+[ 69%] Building CXX object tests/CMakeFiles/test_disconnect_inproc.dir/test_disconnect_inproc.cpp.o
+Linking CXX executable ../bin/test_disconnect_inproc
+[ 69%] Built target test_disconnect_inproc
+Scanning dependencies of target test_filter_ipc
+[ 69%] Building CXX object tests/CMakeFiles/test_filter_ipc.dir/test_filter_ipc.cpp.o
+Linking CXX executable ../bin/test_filter_ipc
+[ 69%] Built target test_filter_ipc
+Scanning dependencies of target test_fork
+[ 70%] Building CXX object tests/CMakeFiles/test_fork.dir/test_fork.cpp.o
+Linking CXX executable ../bin/test_fork
+[ 70%] Built target test_fork
+Scanning dependencies of target test_getsockopt_memset
+[ 70%] Building CXX object tests/CMakeFiles/test_getsockopt_memset.dir/test_getsockopt_memset.cpp.o
+Linking CXX executable ../bin/test_getsockopt_memset
+[ 70%] Built target test_getsockopt_memset
+Scanning dependencies of target test_heartbeats
+[ 70%] Building CXX object tests/CMakeFiles/test_heartbeats.dir/test_heartbeats.cpp.o
+Linking CXX executable ../bin/test_heartbeats
+[ 70%] Built target test_heartbeats
+Scanning dependencies of target test_hwm
+[ 71%] Building CXX object tests/CMakeFiles/test_hwm.dir/test_hwm.cpp.o
+Linking CXX executable ../bin/test_hwm
+[ 71%] Built target test_hwm
+Scanning dependencies of target test_hwm_pubsub
+[ 71%] Building CXX object tests/CMakeFiles/test_hwm_pubsub.dir/test_hwm_pubsub.cpp.o
+Linking CXX executable ../bin/test_hwm_pubsub
+[ 71%] Built target test_hwm_pubsub
+Scanning dependencies of target test_immediate
+[ 72%] Building CXX object tests/CMakeFiles/test_immediate.dir/test_immediate.cpp.o
+Linking CXX executable ../bin/test_immediate
+[ 72%] Built target test_immediate
+Scanning dependencies of target test_inproc_connect
+[ 72%] Building CXX object tests/CMakeFiles/test_inproc_connect.dir/test_inproc_connect.cpp.o
+Linking CXX executable ../bin/test_inproc_connect
+[ 72%] Built target test_inproc_connect
+Scanning dependencies of target test_invalid_rep
+[ 72%] Building CXX object tests/CMakeFiles/test_invalid_rep.dir/test_invalid_rep.cpp.o
+Linking CXX executable ../bin/test_invalid_rep
+[ 72%] Built target test_invalid_rep
+Scanning dependencies of target test_iov
+[ 73%] Building CXX object tests/CMakeFiles/test_iov.dir/test_iov.cpp.o
+Linking CXX executable ../bin/test_iov
+[ 73%] Built target test_iov
+Scanning dependencies of target test_ipc_wildcard
+[ 73%] Building CXX object tests/CMakeFiles/test_ipc_wildcard.dir/test_ipc_wildcard.cpp.o
+Linking CXX executable ../bin/test_ipc_wildcard
+[ 73%] Built target test_ipc_wildcard
+Scanning dependencies of target test_issue_566
+[ 74%] Building CXX object tests/CMakeFiles/test_issue_566.dir/test_issue_566.cpp.o
+Linking CXX executable ../bin/test_issue_566
+[ 74%] Built target test_issue_566
+Scanning dependencies of target test_last_endpoint
+[ 74%] Building CXX object tests/CMakeFiles/test_last_endpoint.dir/test_last_endpoint.cpp.o
+Linking CXX executable ../bin/test_last_endpoint
+[ 74%] Built target test_last_endpoint
+Scanning dependencies of target test_many_sockets
+[ 74%] Building CXX object tests/CMakeFiles/test_many_sockets.dir/test_many_sockets.cpp.o
+Linking CXX executable ../bin/test_many_sockets
+[ 74%] Built target test_many_sockets
+Scanning dependencies of target test_metadata
+[ 75%] Building CXX object tests/CMakeFiles/test_metadata.dir/test_metadata.cpp.o
+Linking CXX executable ../bin/test_metadata
+[ 75%] Built target test_metadata
+Scanning dependencies of target test_monitor
+[ 75%] Building CXX object tests/CMakeFiles/test_monitor.dir/test_monitor.cpp.o
+Linking CXX executable ../bin/test_monitor
+[ 75%] Built target test_monitor
+Scanning dependencies of target test_msg_ffn
+[ 75%] Building CXX object tests/CMakeFiles/test_msg_ffn.dir/test_msg_ffn.cpp.o
+Linking CXX executable ../bin/test_msg_ffn
+[ 75%] Built target test_msg_ffn
+Scanning dependencies of target test_msg_flags
+[ 76%] Building CXX object tests/CMakeFiles/test_msg_flags.dir/test_msg_flags.cpp.o
+Linking CXX executable ../bin/test_msg_flags
+[ 76%] Built target test_msg_flags
+Scanning dependencies of target test_pair_inproc
+[ 76%] Building CXX object tests/CMakeFiles/test_pair_inproc.dir/test_pair_inproc.cpp.o
+Linking CXX executable ../bin/test_pair_inproc
+[ 76%] Built target test_pair_inproc
+Scanning dependencies of target test_pair_ipc
+[ 77%] Building CXX object tests/CMakeFiles/test_pair_ipc.dir/test_pair_ipc.cpp.o
+Linking CXX executable ../bin/test_pair_ipc
+[ 77%] Built target test_pair_ipc
+Scanning dependencies of target test_pair_tcp
+[ 77%] Building CXX object tests/CMakeFiles/test_pair_tcp.dir/test_pair_tcp.cpp.o
+Linking CXX executable ../bin/test_pair_tcp
+[ 77%] Built target test_pair_tcp
+Scanning dependencies of target test_poller
+[ 77%] Building CXX object tests/CMakeFiles/test_poller.dir/test_poller.cpp.o
+Linking CXX executable ../bin/test_poller
+[ 77%] Built target test_poller
+Scanning dependencies of target test_probe_router
+[ 78%] Building CXX object tests/CMakeFiles/test_probe_router.dir/test_probe_router.cpp.o
+Linking CXX executable ../bin/test_probe_router
+[ 78%] Built target test_probe_router
+Scanning dependencies of target test_proxy
+[ 78%] Building CXX object tests/CMakeFiles/test_proxy.dir/test_proxy.cpp.o
+Linking CXX executable ../bin/test_proxy
+[ 78%] Built target test_proxy
+Scanning dependencies of target test_proxy_single_socket
+[ 79%] Building CXX object tests/CMakeFiles/test_proxy_single_socket.dir/test_proxy_single_socket.cpp.o
+Linking CXX executable ../bin/test_proxy_single_socket
+[ 79%] Built target test_proxy_single_socket
+Scanning dependencies of target test_proxy_terminate
+[ 79%] Building CXX object tests/CMakeFiles/test_proxy_terminate.dir/test_proxy_terminate.cpp.o
+Linking CXX executable ../bin/test_proxy_terminate
+[ 79%] Built target test_proxy_terminate
+Scanning dependencies of target test_pub_invert_matching
+[ 79%] Building CXX object tests/CMakeFiles/test_pub_invert_matching.dir/test_pub_invert_matching.cpp.o
+Linking CXX executable ../bin/test_pub_invert_matching
+[ 79%] Built target test_pub_invert_matching
+Scanning dependencies of target test_radio_dish
+[ 80%] Building CXX object tests/CMakeFiles/test_radio_dish.dir/test_radio_dish.cpp.o
+Linking CXX executable ../bin/test_radio_dish
+[ 80%] Built target test_radio_dish
+Scanning dependencies of target test_rebind_ipc
+[ 80%] Building CXX object tests/CMakeFiles/test_rebind_ipc.dir/test_rebind_ipc.cpp.o
+Linking CXX executable ../bin/test_rebind_ipc
+[ 80%] Built target test_rebind_ipc
+Scanning dependencies of target test_reconnect_ivl
+[ 81%] Building CXX object tests/CMakeFiles/test_reconnect_ivl.dir/test_reconnect_ivl.cpp.o
+Linking CXX executable ../bin/test_reconnect_ivl
+[ 81%] Built target test_reconnect_ivl
+Scanning dependencies of target test_req_correlate
+[ 81%] Building CXX object tests/CMakeFiles/test_req_correlate.dir/test_req_correlate.cpp.o
+Linking CXX executable ../bin/test_req_correlate
+[ 81%] Built target test_req_correlate
+Scanning dependencies of target test_req_relaxed
+[ 81%] Building CXX object tests/CMakeFiles/test_req_relaxed.dir/test_req_relaxed.cpp.o
+Linking CXX executable ../bin/test_req_relaxed
+[ 81%] Built target test_req_relaxed
+Scanning dependencies of target test_reqrep_device
+[ 82%] Building CXX object tests/CMakeFiles/test_reqrep_device.dir/test_reqrep_device.cpp.o
+Linking CXX executable ../bin/test_reqrep_device
+[ 82%] Built target test_reqrep_device
+Scanning dependencies of target test_reqrep_inproc
+[ 82%] Building CXX object tests/CMakeFiles/test_reqrep_inproc.dir/test_reqrep_inproc.cpp.o
+Linking CXX executable ../bin/test_reqrep_inproc
+[ 82%] Built target test_reqrep_inproc
+Scanning dependencies of target test_reqrep_ipc
+[ 82%] Building CXX object tests/CMakeFiles/test_reqrep_ipc.dir/test_reqrep_ipc.cpp.o
+Linking CXX executable ../bin/test_reqrep_ipc
+[ 82%] Built target test_reqrep_ipc
+Scanning dependencies of target test_reqrep_tcp
+[ 83%] Building CXX object tests/CMakeFiles/test_reqrep_tcp.dir/test_reqrep_tcp.cpp.o
+Linking CXX executable ../bin/test_reqrep_tcp
+[ 83%] Built target test_reqrep_tcp
+Scanning dependencies of target test_router_handover
+[ 83%] Building CXX object tests/CMakeFiles/test_router_handover.dir/test_router_handover.cpp.o
+Linking CXX executable ../bin/test_router_handover
+[ 83%] Built target test_router_handover
+Scanning dependencies of target test_router_mandatory
+[ 84%] Building CXX object tests/CMakeFiles/test_router_mandatory.dir/test_router_mandatory.cpp.o
+Linking CXX executable ../bin/test_router_mandatory
+[ 84%] Built target test_router_mandatory
+Scanning dependencies of target test_router_mandatory_hwm
+[ 84%] Building CXX object tests/CMakeFiles/test_router_mandatory_hwm.dir/test_router_mandatory_hwm.cpp.o
+Linking CXX executable ../bin/test_router_mandatory_hwm
+[ 84%] Built target test_router_mandatory_hwm
+Scanning dependencies of target test_scatter_gather
+[ 84%] Building CXX object tests/CMakeFiles/test_scatter_gather.dir/test_scatter_gather.cpp.o
+Linking CXX executable ../bin/test_scatter_gather
+[ 84%] Built target test_scatter_gather
+Scanning dependencies of target test_security_curve
+[ 85%] Building CXX object tests/CMakeFiles/test_security_curve.dir/test_security_curve.cpp.o
+[ 85%] Building C object tests/CMakeFiles/test_security_curve.dir/__/src/tweetnacl.c.o
+[ 86%] Building CXX object tests/CMakeFiles/test_security_curve.dir/__/src/err.cpp.o
+[ 86%] Building CXX object tests/CMakeFiles/test_security_curve.dir/__/src/random.cpp.o
+[ 86%] Building CXX object tests/CMakeFiles/test_security_curve.dir/__/src/clock.cpp.o
+Linking CXX executable ../bin/test_security_curve
+[ 86%] Built target test_security_curve
+Scanning dependencies of target test_security_null
+[ 87%] Building CXX object tests/CMakeFiles/test_security_null.dir/test_security_null.cpp.o
+Linking CXX executable ../bin/test_security_null
+[ 87%] Built target test_security_null
+Scanning dependencies of target test_security_plain
+[ 87%] Building CXX object tests/CMakeFiles/test_security_plain.dir/test_security_plain.cpp.o
+Linking CXX executable ../bin/test_security_plain
+[ 87%] Built target test_security_plain
+Scanning dependencies of target test_security_zap
+[ 87%] Building CXX object tests/CMakeFiles/test_security_zap.dir/test_security_zap.cpp.o
+Linking CXX executable ../bin/test_security_zap
+[ 87%] Built target test_security_zap
+Scanning dependencies of target test_setsockopt
+[ 88%] Building CXX object tests/CMakeFiles/test_setsockopt.dir/test_setsockopt.cpp.o
+Linking CXX executable ../bin/test_setsockopt
+[ 88%] Built target test_setsockopt
+Scanning dependencies of target test_shutdown_stress
+[ 88%] Building CXX object tests/CMakeFiles/test_shutdown_stress.dir/test_shutdown_stress.cpp.o
+Linking CXX executable ../bin/test_shutdown_stress
+[ 88%] Built target test_shutdown_stress
+Scanning dependencies of target test_socket_null
+[ 89%] Building CXX object tests/CMakeFiles/test_socket_null.dir/test_socket_null.cpp.o
+Linking CXX executable ../bin/test_socket_null
+[ 89%] Built target test_socket_null
+Scanning dependencies of target test_sockopt_hwm
+[ 89%] Building CXX object tests/CMakeFiles/test_sockopt_hwm.dir/test_sockopt_hwm.cpp.o
+Linking CXX executable ../bin/test_sockopt_hwm
+[ 89%] Built target test_sockopt_hwm
+Scanning dependencies of target test_sodium
+[ 89%] Building CXX object tests/CMakeFiles/test_sodium.dir/test_sodium.cpp.o
+Linking CXX executable ../bin/test_sodium
+[ 89%] Built target test_sodium
+Scanning dependencies of target test_spec_dealer
+[ 90%] Building CXX object tests/CMakeFiles/test_spec_dealer.dir/test_spec_dealer.cpp.o
+Linking CXX executable ../bin/test_spec_dealer
+[ 90%] Built target test_spec_dealer
+Scanning dependencies of target test_spec_pushpull
+[ 90%] Building CXX object tests/CMakeFiles/test_spec_pushpull.dir/test_spec_pushpull.cpp.o
+Linking CXX executable ../bin/test_spec_pushpull
+[ 90%] Built target test_spec_pushpull
+Scanning dependencies of target test_spec_rep
+[ 91%] Building CXX object tests/CMakeFiles/test_spec_rep.dir/test_spec_rep.cpp.o
+Linking CXX executable ../bin/test_spec_rep
+[ 91%] Built target test_spec_rep
+Scanning dependencies of target test_spec_req
+[ 91%] Building CXX object tests/CMakeFiles/test_spec_req.dir/test_spec_req.cpp.o
+Linking CXX executable ../bin/test_spec_req
+[ 91%] Built target test_spec_req
+Scanning dependencies of target test_spec_router
+[ 91%] Building CXX object tests/CMakeFiles/test_spec_router.dir/test_spec_router.cpp.o
+Linking CXX executable ../bin/test_spec_router
+[ 91%] Built target test_spec_router
+Scanning dependencies of target test_srcfd
+[ 92%] Building CXX object tests/CMakeFiles/test_srcfd.dir/test_srcfd.cpp.o
+Linking CXX executable ../bin/test_srcfd
+[ 92%] Built target test_srcfd
+Scanning dependencies of target test_stream
+[ 92%] Building CXX object tests/CMakeFiles/test_stream.dir/test_stream.cpp.o
+Linking CXX executable ../bin/test_stream
+[ 92%] Built target test_stream
+Scanning dependencies of target test_stream_disconnect
+[ 93%] Building CXX object tests/CMakeFiles/test_stream_disconnect.dir/test_stream_disconnect.cpp.o
+Linking CXX executable ../bin/test_stream_disconnect
+[ 93%] Built target test_stream_disconnect
+Scanning dependencies of target test_stream_empty
+[ 93%] Building CXX object tests/CMakeFiles/test_stream_empty.dir/test_stream_empty.cpp.o
+Linking CXX executable ../bin/test_stream_empty
+[ 93%] Built target test_stream_empty
+Scanning dependencies of target test_stream_exceeds_buffer
+[ 93%] Building CXX object tests/CMakeFiles/test_stream_exceeds_buffer.dir/test_stream_exceeds_buffer.cpp.o
+Linking CXX executable ../bin/test_stream_exceeds_buffer
+[ 93%] Built target test_stream_exceeds_buffer
+Scanning dependencies of target test_stream_timeout
+[ 94%] Building CXX object tests/CMakeFiles/test_stream_timeout.dir/test_stream_timeout.cpp.o
+Linking CXX executable ../bin/test_stream_timeout
+[ 94%] Built target test_stream_timeout
+Scanning dependencies of target test_sub_forward
+[ 94%] Building CXX object tests/CMakeFiles/test_sub_forward.dir/test_sub_forward.cpp.o
+Linking CXX executable ../bin/test_sub_forward
+[ 94%] Built target test_sub_forward
+Scanning dependencies of target test_system
+[ 94%] Building CXX object tests/CMakeFiles/test_system.dir/test_system.cpp.o
+Linking CXX executable ../bin/test_system
+[ 94%] Built target test_system
+Scanning dependencies of target test_term_endpoint
+[ 95%] Building CXX object tests/CMakeFiles/test_term_endpoint.dir/test_term_endpoint.cpp.o
+Linking CXX executable ../bin/test_term_endpoint
+[ 95%] Built target test_term_endpoint
+Scanning dependencies of target test_thread_safe
+[ 95%] Building CXX object tests/CMakeFiles/test_thread_safe.dir/test_thread_safe.cpp.o
+Linking CXX executable ../bin/test_thread_safe
+[ 95%] Built target test_thread_safe
+Scanning dependencies of target test_timeo
+[ 96%] Building CXX object tests/CMakeFiles/test_timeo.dir/test_timeo.cpp.o
+Linking CXX executable ../bin/test_timeo
+[ 96%] Built target test_timeo
+Scanning dependencies of target test_timers
+[ 96%] Building CXX object tests/CMakeFiles/test_timers.dir/test_timers.cpp.o
+Linking CXX executable ../bin/test_timers
+[ 96%] Built target test_timers
+Scanning dependencies of target test_udp
+[ 96%] Building CXX object tests/CMakeFiles/test_udp.dir/test_udp.cpp.o
+Linking CXX executable ../bin/test_udp
+[ 96%] Built target test_udp
+Scanning dependencies of target test_unbind_inproc
+[ 97%] Building CXX object tests/CMakeFiles/test_unbind_inproc.dir/test_unbind_inproc.cpp.o
+Linking CXX executable ../bin/test_unbind_inproc
+[ 97%] Built target test_unbind_inproc
+Scanning dependencies of target test_unbind_wildcard
+[ 97%] Building CXX object tests/CMakeFiles/test_unbind_wildcard.dir/test_unbind_wildcard.cpp.o
+Linking CXX executable ../bin/test_unbind_wildcard
+[ 97%] Built target test_unbind_wildcard
+Scanning dependencies of target test_use_fd_ipc
+[ 98%] Building CXX object tests/CMakeFiles/test_use_fd_ipc.dir/test_use_fd_ipc.cpp.o
+Linking CXX executable ../bin/test_use_fd_ipc
+[ 98%] Built target test_use_fd_ipc
+Scanning dependencies of target test_use_fd_tcp
+[ 98%] Building CXX object tests/CMakeFiles/test_use_fd_tcp.dir/test_use_fd_tcp.cpp.o
+Linking CXX executable ../bin/test_use_fd_tcp
+[ 98%] Built target test_use_fd_tcp
+Scanning dependencies of target test_xpub_manual
+[ 98%] Building CXX object tests/CMakeFiles/test_xpub_manual.dir/test_xpub_manual.cpp.o
+Linking CXX executable ../bin/test_xpub_manual
+[ 98%] Built target test_xpub_manual
+Scanning dependencies of target test_xpub_nodrop
+[ 99%] Building CXX object tests/CMakeFiles/test_xpub_nodrop.dir/test_xpub_nodrop.cpp.o
+Linking CXX executable ../bin/test_xpub_nodrop
+[ 99%] Built target test_xpub_nodrop
+Scanning dependencies of target test_xpub_welcome_msg
+[ 99%] Building CXX object tests/CMakeFiles/test_xpub_welcome_msg.dir/test_xpub_welcome_msg.cpp.o
+Linking CXX executable ../bin/test_xpub_welcome_msg
+[ 99%] Built target test_xpub_welcome_msg
+Scanning dependencies of target test_zmq_poll_fd
+[100%] Building CXX object tests/CMakeFiles/test_zmq_poll_fd.dir/test_zmq_poll_fd.cpp.o
+Linking CXX executable ../bin/test_zmq_poll_fd
+[100%] Built target test_zmq_poll_fd
++ make install
+[ 35%] Built target objects
+[ 61%] Built target libzmq
+[ 61%] Built target inproc_lat
+[ 61%] Built target inproc_thr
+[ 62%] Built target local_lat
+[ 62%] Built target local_thr
+[ 62%] Built target remote_lat
+[ 63%] Built target remote_thr
+[ 63%] Built target test_abstract_ipc
+[ 63%] Built target test_ancillaries
+[ 64%] Built target test_atomics
+[ 64%] Built target test_base85
+[ 65%] Built target test_bind_after_connect_tcp
+[ 65%] Built target test_bind_src_address
+[ 65%] Built target test_capabilities
+[ 66%] Built target test_client_server
+[ 66%] Built target test_conflate
+[ 67%] Built target test_connect_resolve
+[ 67%] Built target test_connect_rid
+[ 67%] Built target test_ctx_destroy
+[ 68%] Built target test_ctx_options
+[ 68%] Built target test_dgram
+[ 68%] Built target test_diffserv
+[ 69%] Built target test_disconnect_inproc
+[ 69%] Built target test_filter_ipc
+[ 70%] Built target test_fork
+[ 70%] Built target test_getsockopt_memset
+[ 70%] Built target test_heartbeats
+[ 71%] Built target test_hwm
+[ 71%] Built target test_hwm_pubsub
+[ 72%] Built target test_immediate
+[ 72%] Built target test_inproc_connect
+[ 72%] Built target test_invalid_rep
+[ 73%] Built target test_iov
+[ 73%] Built target test_ipc_wildcard
+[ 74%] Built target test_issue_566
+[ 74%] Built target test_last_endpoint
+[ 74%] Built target test_many_sockets
+[ 75%] Built target test_metadata
+[ 75%] Built target test_monitor
+[ 75%] Built target test_msg_ffn
+[ 76%] Built target test_msg_flags
+[ 76%] Built target test_pair_inproc
+[ 77%] Built target test_pair_ipc
+[ 77%] Built target test_pair_tcp
+[ 77%] Built target test_poller
+[ 78%] Built target test_probe_router
+[ 78%] Built target test_proxy
+[ 79%] Built target test_proxy_single_socket
+[ 79%] Built target test_proxy_terminate
+[ 79%] Built target test_pub_invert_matching
+[ 80%] Built target test_radio_dish
+[ 80%] Built target test_rebind_ipc
+[ 81%] Built target test_reconnect_ivl
+[ 81%] Built target test_req_correlate
+[ 81%] Built target test_req_relaxed
+[ 82%] Built target test_reqrep_device
+[ 82%] Built target test_reqrep_inproc
+[ 82%] Built target test_reqrep_ipc
+[ 83%] Built target test_reqrep_tcp
+[ 83%] Built target test_router_handover
+[ 84%] Built target test_router_mandatory
+[ 84%] Built target test_router_mandatory_hwm
+[ 84%] Built target test_scatter_gather
+[ 86%] Built target test_security_curve
+[ 87%] Built target test_security_null
+[ 87%] Built target test_security_plain
+[ 87%] Built target test_security_zap
+[ 88%] Built target test_setsockopt
+[ 88%] Built target test_shutdown_stress
+[ 89%] Built target test_socket_null
+[ 89%] Built target test_sockopt_hwm
+[ 89%] Built target test_sodium
+[ 90%] Built target test_spec_dealer
+[ 90%] Built target test_spec_pushpull
+[ 91%] Built target test_spec_rep
+[ 91%] Built target test_spec_req
+[ 91%] Built target test_spec_router
+[ 92%] Built target test_srcfd
+[ 92%] Built target test_stream
+[ 93%] Built target test_stream_disconnect
+[ 93%] Built target test_stream_empty
+[ 93%] Built target test_stream_exceeds_buffer
+[ 94%] Built target test_stream_timeout
+[ 94%] Built target test_sub_forward
+[ 94%] Built target test_system
+[ 95%] Built target test_term_endpoint
+[ 95%] Built target test_thread_safe
+[ 96%] Built target test_timeo
+[ 96%] Built target test_timers
+[ 96%] Built target test_udp
+[ 97%] Built target test_unbind_inproc
+[ 97%] Built target test_unbind_wildcard
+[ 98%] Built target test_use_fd_ipc
+[ 98%] Built target test_use_fd_tcp
+[ 98%] Built target test_xpub_manual
+[ 99%] Built target test_xpub_nodrop
+[ 99%] Built target test_xpub_welcome_msg
+[100%] Built target test_zmq_poll_fd
+Install the project...
+-- Install configuration: "RelWithDebInfo"
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/lib/pkgconfig/libzmq.pc
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/bin/local_lat
+-- Removed runtime path from "/home/btorpey/install/libzmq/4.2.3/release/bin/local_lat"
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/bin/remote_lat
+-- Removed runtime path from "/home/btorpey/install/libzmq/4.2.3/release/bin/remote_lat"
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/bin/local_thr
+-- Removed runtime path from "/home/btorpey/install/libzmq/4.2.3/release/bin/local_thr"
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/bin/remote_thr
+-- Removed runtime path from "/home/btorpey/install/libzmq/4.2.3/release/bin/remote_thr"
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/bin/inproc_lat
+-- Removed runtime path from "/home/btorpey/install/libzmq/4.2.3/release/bin/inproc_lat"
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/bin/inproc_thr
+-- Removed runtime path from "/home/btorpey/install/libzmq/4.2.3/release/bin/inproc_thr"
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/lib64/libzmq.so.4.2.3
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/lib64/libzmq.so.5.1.3
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/lib64/libzmq.so
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/include/zmq.h
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/include/zmq_utils.h
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/share/zmq/AUTHORS.txt
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/share/zmq/COPYING.txt
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/share/zmq/COPYING.LESSER.txt
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/share/zmq/NEWS.txt
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_pgm.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_vmci.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_inproc.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_tcp.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_ctx_term.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_msg_move.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_ctx_new.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_plain.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_msg_send.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_bind.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_setsockopt.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_poll.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_ctx_set.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_ipc.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_recv.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_udp.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_ctx_get.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_send.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_atomic_counter_dec.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_term.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_atomic_counter_value.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_ctx_shutdown.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_recvmsg.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_unbind.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_sendmsg.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_atomic_counter_set.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_atomic_counter_new.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_msg_get.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_has.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_send_const.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_msg_init_data.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_msg_set_routing_id.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_msg_recv.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_getsockopt.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_curve.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_proxy.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_z85_decode.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_msg_more.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_disconnect.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_curve_public.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_msg_routing_id.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_msg_gets.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_msg_init.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_msg_close.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_errno.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_init.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_msg_copy.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_strerror.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_tipc.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_proxy_steerable.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_version.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_z85_encode.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_ctx_destroy.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_null.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_connect.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_socket.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_atomic_counter_inc.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_socket_monitor.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_msg_data.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_atomic_counter_destroy.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_msg_set.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_msg_size.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_curve_keypair.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_msg_init_size.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_gssapi.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/doc/zmq/zmq_close.html
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/share/cmake/ZeroMQ/ZeroMQTargets.cmake
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/share/cmake/ZeroMQ/ZeroMQTargets-relwithdebinfo.cmake
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/share/cmake/ZeroMQ/ZeroMQConfig.cmake
+-- Installing: /home/btorpey/install/libzmq/4.2.3/release/share/cmake/ZeroMQ/ZeroMQConfigVersion.cmake
++ rc=0
++ [[ 0 != 0 ]]
++ cd -
+/home/btorpey/work/zmqtests/libzmq/4.2.3
++ mkdir -p /home/btorpey/install/libzmq/4.2.3/release/src
++ cd repo
++ cp -rp src /home/btorpey/install/libzmq/4.2.3/release

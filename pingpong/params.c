@@ -5,6 +5,7 @@ int pingPort = 0;
 int pongPort = 0;
 int numRequests = 100000;
 bool pollFlag = false;
+bool controlFlag = false;
 
 void parseParams(int argc, char** argv)
 {
@@ -24,6 +25,10 @@ void parseParams(int argc, char** argv)
       if (strncasecmp("-poll", argv[i], strlen(argv[i])) == 0) {
          pollFlag = true;
          log_msg("Param:poll=%d", pollFlag);
+      }
+      if (strncasecmp("-control", argv[i], strlen(argv[i])) == 0) {
+         controlFlag = true;
+         log_msg("Param:control=%d", controlFlag);
       }
    }
 }
