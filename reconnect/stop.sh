@@ -2,5 +2,5 @@
 
 source ./setenv.sh
 
-pkill $@ proxy
+pkill -n $@ proxy
 pkill $@ peer
