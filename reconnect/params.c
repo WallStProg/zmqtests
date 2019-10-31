@@ -2,10 +2,15 @@
 
 int port = 0;
 int stopReconnectOnError = 0;
+char* tcpAddr = NULL;
 
 void parseParams(int argc, char** argv)
 {
    for (int i = 1; i < argc; i++) {
+      if (strncasecmp("-addr", argv[i], strlen(argv[i])) == 0) {
+         tcpAddr = argv[++i];
+         log_msg("Param:-addr=%s", tcpAddr);
+      }
       if (strncasecmp("-port", argv[i], strlen(argv[i])) == 0) {
          port = atoi(argv[++i]);
          log_msg("Param:port=%d", port);
@@ -15,4 +20,7 @@ void parseParams(int argc, char** argv)
          log_msg("Param:stopReconnectOnError=%d", stopReconnectOnError);
       }
    }
+
+   if (tcpAddr == NULL)
+      tcpAddr = strdup("127.0.0.1");
 }

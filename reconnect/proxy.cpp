@@ -5,7 +5,7 @@
 // #define _GNU_SOURCE
 
 //#include <unistd.h>
-// #include <stdlib.h>
+#include <stdlib.h>
 #include <signal.h>
 #include <uuid/uuid.h>
 #include <string.h>
@@ -13,12 +13,16 @@
 #include <zmq.h>
 #include "common.h"
 
+#include "params.c"
+
 void sighandler(int unused)
 {
 }
 
 int main (int argc, char** argv)
 {
+   parseParams(argc, argv);
+
    // create uuid
    uuid_t temp;
    uuid_generate(temp);
@@ -29,7 +33,9 @@ int main (int argc, char** argv)
 
    // bind sub and get endpoint
    void* frontend = zmq_socket(theContext, ZMQ_XSUB);
-   zmq_bind (frontend, "tcp://127.0.0.1:*");
+   char pubEndpoint[ZMQ_MAX_ENDPOINT_LENGTH +1];
+   sprintf(pubEndpoint, "tcp://%s:0", tcpAddr);
+   zmq_bind (frontend, pubEndpoint);
    char subEndpoint[ZMQ_MAX_ENDPOINT_LENGTH +1];
    size_t nameSize = sizeof(subEndpoint);
    zmq_getsockopt(frontend, ZMQ_LAST_ENDPOINT, subEndpoint, &nameSize);
@@ -44,8 +50,9 @@ int main (int argc, char** argv)
    strcpy(welcomeMsg.endpoint, subEndpoint);
    zmq_setsockopt(backend, ZMQ_XPUB_WELCOME_MSG, &welcomeMsg, sizeof(welcomeMsg));
 
-   // bind the backend socket to pub endpoint
-   zmq_bind(backend, "tcp://127.0.0.1:5555");
+   // bind the backend socket to "well-known" port
+   sprintf(pubEndpoint, "tcp://%s:5555", tcpAddr);
+   zmq_bind(backend, pubEndpoint);
 
    //  Run the proxy until the user interrupts us
    signal(SIGINT, &sighandler);

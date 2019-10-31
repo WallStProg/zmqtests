@@ -183,6 +183,25 @@ int startMonitor(void* context)
    return 0;
 }
 
+int startMonitor(void* context, void* (*function)(void*))
+{
+   int rc;
+
+   monitorSub = zmq_socket(context, ZMQ_SERVER);
+   assert(monitorSub);
+   rc = zmq_bind(monitorSub, "inproc://monitor");
+   assert(rc == 0);
+
+   monitorPub = zmq_socket(context, ZMQ_CLIENT);
+   assert(monitorPub);
+   rc = zmq_connect(monitorPub, "inproc://monitor");
+   assert(rc == 0);
+
+   rc = pthread_create(&monitorThread, NULL, function, context);
+   assert(rc == 0);
+
+   return 0;
+}
 
 int stopMonitor()
 {

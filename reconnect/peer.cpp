@@ -51,7 +51,7 @@ int main(int argc, char** argv)
    CALL_INT_FUNC(zmq_socket_monitor(dataPub, "inproc://dataPub", ZMQ_EVENT_ALL));
 
    char pubEndpoint[ZMQ_MAX_ENDPOINT_LENGTH +1];
-   sprintf(pubEndpoint, "tcp://127.0.0.1:%d", port);
+   sprintf(pubEndpoint, "tcp://%s:%d", tcpAddr, port);
    CALL_INT_FUNC(zmq_bind(dataPub, pubEndpoint));
    size_t nameSize = sizeof(pubEndpoint);
    CALL_INT_FUNC(zmq_getsockopt(dataPub, ZMQ_LAST_ENDPOINT, pubEndpoint, &nameSize));
@@ -60,15 +60,19 @@ int main(int argc, char** argv)
    void* proxyPub = zmq_socket(theContext, ZMQ_PUB);
    CALL_INT_FUNC(zmq_socket_monitor(proxyPub, "inproc://proxyPub", ZMQ_EVENT_ALL));
 
-   // connect to proxy sub
+   // connect to proxy sub at "well-known" port
    void* proxySub = zmq_socket(theContext, ZMQ_SUB);
    CALL_INT_FUNC(zmq_socket_monitor(proxySub, "inproc://proxySub", ZMQ_EVENT_ALL));
    CALL_INT_FUNC(zmq_setsockopt(proxySub, ZMQ_SUBSCRIBE, "", 0));
-   CALL_INT_FUNC(zmq_connect(proxySub, "tcp://127.0.0.1:5555"));
+   char proxyEndpoint[ZMQ_MAX_ENDPOINT_LENGTH +1];
+   sprintf(proxyEndpoint, "tcp://%s:5555", tcpAddr);
+   CALL_INT_FUNC(zmq_connect(proxySub, proxyEndpoint));
 
    // create data sub
    void* dataSub = zmq_socket(theContext, ZMQ_SUB);
    CALL_INT_FUNC(zmq_socket_monitor(dataSub, "inproc://dataSub", ZMQ_EVENT_ALL));
+   int heartbeatInterval = 1000;
+   CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_HEARTBEAT_IVL, &heartbeatInterval, sizeof(heartbeatInterval)));
    CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_RECONNECT_STOP, &stopReconnectOnError, sizeof(stopReconnectOnError)));
    CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_SUBSCRIBE, "", 0));
 
