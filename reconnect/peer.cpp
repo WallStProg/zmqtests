@@ -70,9 +70,12 @@ int main(int argc, char** argv)
 
    // create data sub
    void* dataSub = zmq_socket(theContext, ZMQ_SUB);
+   // monitor socket
    CALL_INT_FUNC(zmq_socket_monitor(dataSub, "inproc://dataSub", ZMQ_EVENT_ALL));
+   // set heartbeat interval to detect/trigger disconnect
    int heartbeatInterval = 1000;
    CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_HEARTBEAT_IVL, &heartbeatInterval, sizeof(heartbeatInterval)));
+   // stop reconnecting on specified conditions
    CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_RECONNECT_STOP, &stopReconnectOnError, sizeof(stopReconnectOnError)));
    CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_SUBSCRIBE, "", 0));
 
