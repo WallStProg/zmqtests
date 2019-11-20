@@ -59,6 +59,8 @@ int main(int argc, char** argv)
    void* dataSub = zmq_socket(theContext, ZMQ_SUB);
    CALL_INT_FUNC(zmq_socket_monitor(dataSub, "inproc://dataSub", ZMQ_EVENT_ALL));
    CALL_INT_FUNC (zmq_setsockopt (dataSub, ZMQ_RECONNECT_IVL, &interval, sizeof (interval)));
+   char minVersion[2] = {3,0};
+   CALL_INT_FUNC (zmq_setsockopt (dataSub, ZMQ_MIN_ZMTP_VERSION, &minVersion, sizeof (minVersion)));
    CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_RECONNECT_STOP, &stopReconnectOnError, sizeof(stopReconnectOnError)));
    CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_SUBSCRIBE, "", 0));
 
@@ -66,7 +68,7 @@ int main(int argc, char** argv)
    sprintf(pubEndpoint, "tcp://127.0.0.1:%d", port);
    CALL_INT_FUNC(zmq_connect(dataSub, pubEndpoint));
 
-   sleep(60);
+   sleep(120);
 
    rc = zmq_socket_monitor(dataSub, NULL, ZMQ_EVENT_ALL);
    assert(rc == 0);
