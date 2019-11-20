@@ -58,8 +58,6 @@ int main(int argc, char** argv)
    // create data sub
    void* dataSub = zmq_socket(theContext, ZMQ_SUB);
    CALL_INT_FUNC(zmq_socket_monitor(dataSub, "inproc://dataSub", ZMQ_EVENT_ALL));
-   // set reconnect interval so only a single reconnect is tried
-   int interval = 60 * 1000;
    CALL_INT_FUNC (zmq_setsockopt (dataSub, ZMQ_RECONNECT_IVL, &interval, sizeof (interval)));
    CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_RECONNECT_STOP, &stopReconnectOnError, sizeof(stopReconnectOnError)));
    CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_SUBSCRIBE, "", 0));
