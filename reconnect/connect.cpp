@@ -60,9 +60,13 @@ int main(int argc, char** argv)
    CALL_INT_FUNC(zmq_socket_monitor(dataSub, "inproc://dataSub", ZMQ_EVENT_ALL));
    CALL_INT_FUNC (zmq_setsockopt (dataSub, ZMQ_RECONNECT_IVL, &interval, sizeof (interval)));
    CALL_INT_FUNC (zmq_setsockopt (dataSub, ZMQ_HANDSHAKE_IVL, &interval, sizeof (interval)));
+   #ifdef ZMQ_MIN_ZMTP_VERSION
    char minVersion[] = {3,0};
    CALL_INT_FUNC (zmq_setsockopt (dataSub, ZMQ_MIN_ZMTP_VERSION, &minVersion, sizeof (minVersion)));
+   #endif
+   #ifdef ZMQ_RECONNECT_STOP
    CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_RECONNECT_STOP, &stopReconnectOnError, sizeof(stopReconnectOnError)));
+   #endif
    CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_SUBSCRIBE, "", 0));
 
    char pubEndpoint[ZMQ_MAX_ENDPOINT_LENGTH +1];

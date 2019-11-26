@@ -75,8 +75,10 @@ int main(int argc, char** argv)
    // set heartbeat interval to detect/trigger disconnect
    int heartbeatInterval = 1000;
    CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_HEARTBEAT_IVL, &heartbeatInterval, sizeof(heartbeatInterval)));
+   #ifdef ZMQ_RECONNECT_STOP
    // stop reconnecting on specified conditions
    CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_RECONNECT_STOP, &stopReconnectOnError, sizeof(stopReconnectOnError)));
+   #endif
    CALL_INT_FUNC(zmq_setsockopt(dataSub, ZMQ_SUBSCRIBE, "", 0));
 
    typedef map<string, string> _peers;
@@ -104,7 +106,9 @@ int main(int argc, char** argv)
          if (msg.command == 'W') {
             // welcome msg from proxy
             log_msg("Connecting proxy pub to: %s\n", msg.endpoint);
+            #ifdef ZMQ_RECONNECT_STOP
             CALL_INT_FUNC(zmq_setsockopt(proxyPub, ZMQ_RECONNECT_STOP, &stopReconnectOnError, sizeof(stopReconnectOnError)));
+            #endif
             CALL_INT_FUNC(zmq_connect(proxyPub, msg.endpoint));
          }
          else if (msg.command == 'C') {
