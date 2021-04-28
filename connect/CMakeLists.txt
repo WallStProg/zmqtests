@@ -7,4 +7,4 @@ include(../zeromq.cmake)
 add_executable(connect connect.cpp monitor.cpp common.c)
 target_link_libraries(connect uuid pthread)
 
-add_executable(dummy dummy.c)
+add_executable(dummy dummy.cpp common.c)

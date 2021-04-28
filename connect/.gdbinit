@@ -1,7 +1,8 @@
 set breakpoint pending on
 
 # connect test
-set args -port 9998 -stop-reconnect-on 3
+#set args -port 9998 -stop-reconnect-on 3
+set args -port 139 -stop-reconnect-on 3
 
 # received greeting from peer
 #b zmtp_engine.cpp:166

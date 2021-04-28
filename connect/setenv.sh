@@ -1,25 +1,17 @@
 #!/bin/bash -xv
 
-# accept version on command line
-[[ -n $1 ]] && ZMQ_VERSION=$1
-# default to latest version
-[[ -z ${ZMQ_VERSION} ]] && ZMQ_VERSION=4.3.0
-export ZMQ_VERSION
-
-if [[ ${OSTYPE} == *darwin* ]]; then
-   # on Mac, assume zeromq was installed w/"brew install zeromq"
-   # Note: also need "brew install ossp-uuid"
-   export ZMQ_ROOT=/usr/local/Cellar/zeromq/${ZMQ_VERSION}
-elif [[ ${OSTYPE} == *linux* ]]; then
-   # change this to reflect location of ZeroMQ
-   # NOTE: below assumes build from source -- have been unable to find a reliable install
-   # for CentOS 6/7
-   #export ZMQ_ROOT=/build/share/libzmq/${ZMQ_VERSION}
-   export ZMQ_ROOT=$HOME/install/libzmq/${ZMQ_VERSION}/dev
-   #export ZMQ_ROOT=/usr
-else
-   echo "Unknown OS!"
-   exit 1
+if [[ -z "${ZMQ_ROOT}" ]] ; then
+   # pick a reasonable default
+   if [[ ${OSTYPE} == *darwin* ]]; then
+      # on Mac, assume zeromq was installed w/"brew install zeromq"
+      # Note: also need "brew install ossp-uuid"
+      export ZMQ_ROOT=/usr/local/Cellar/zeromq/${ZMQ_VERSION}
+   elif [[ ${OSTYPE} == *linux* ]]; then
+      export ZMQ_ROOT=/usr
+   else
+      echo "Unknown OS!"
+      exit 1
+   fi
 fi
 
 # TSAN
@@ -37,4 +29,4 @@ if [[ ${BUILD_TYPE} == "asan" ]];then
    export LSAN_OPTIONS=":detect_leaks=0"
 fi
 
-export LD_LIBRARY_PATH=${ZMQ_ROOT}/lib64:${LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH=${ZMQ_ROOT}/lib64:${ZMQ_ROOT}/lib:${LD_LIBRARY_PATH}
