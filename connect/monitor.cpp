@@ -87,80 +87,72 @@ int monitorEvent(void* socket, const char* name)
    return 0;
 }
 
-void* monitorFunc(void* context)
+
+uint64_t monitorEvent_v2(void *socket, const char* socketName)
 {
-   int rc;
+    //  First frame in message contains event number
+    zmq_msg_t msg;
+    zmq_msg_init (&msg);
+    if (zmq_msg_recv (&msg, socket, 0) == -1)
+        return -1;              //  Interrupted, presumably
+    //assert (zmq_msg_more (&msg));
 
-   void* dataPub = zmq_socket(context, ZMQ_PAIR);
-   assert(dataPub);
-   rc = zmq_connect(dataPub, "inproc://dataPub");
-   assert(rc == 0);
+    uint64_t event;
+    memcpy (&event, zmq_msg_data (&msg), sizeof (event));
+    const char* eventName = get_zmqEventName(event);
+    zmq_msg_close (&msg);
 
-   void* dataSub = zmq_socket(context, ZMQ_PAIR);
-   assert(dataSub);
-   rc = zmq_connect(dataSub, "inproc://dataSub");
-   assert(rc == 0);
+    //  Second frame in message contains the number of values
+    zmq_msg_init (&msg);
+    if (zmq_msg_recv (&msg, socket, 0) == -1)
+        return -1;              //  Interrupted, presumably
+    //assert (zmq_msg_more (&msg));
 
-   void* proxyPub = zmq_socket(context, ZMQ_PAIR);
-   assert(proxyPub);
-   rc = zmq_connect(proxyPub, "inproc://proxyPub");
-   assert(rc == 0);
+    uint64_t value_count;
+    memcpy (&value_count, zmq_msg_data (&msg), sizeof (value_count));
+    zmq_msg_close (&msg);
 
-   void* proxySub = zmq_socket(context, ZMQ_PAIR);
-   assert(proxySub);
-   rc = zmq_connect(proxySub, "inproc://proxySub");
-   assert(rc == 0);
+    uint64_t value = 0;
+    for (uint64_t i = 0; i < value_count; ++i) {
+        //  Subsequent frames in message contain event values
+        zmq_msg_init (&msg);
+        if (zmq_msg_recv (&msg, socket, 0) == -1)
+            return -1;              //  Interrupted, presumably
+        //assert (zmq_msg_more (&msg));
 
-   while(1) {
-      zmq_pollitem_t items[] = {
-         { dataPub,    0, ZMQ_POLLIN , 0},
-         { dataSub,    0, ZMQ_POLLIN , 0},
-         { proxyPub,   0, ZMQ_POLLIN , 0},
-         { proxySub,   0, ZMQ_POLLIN , 0},
-         { monitorSub, 0, ZMQ_POLLIN , 0},
-      };
-      rc = zmq_poll(items, 5, -1);
+        memcpy (&value, zmq_msg_data (&msg), sizeof (value));
+        zmq_msg_close (&msg);
+    }
 
-      if (items[0].revents & ZMQ_POLLIN) {
-         rc = monitorEvent(dataPub, "dataPub");
-         assert(rc == 0);
-      }
+    //  Second-to-last frame in message contains local address
+    zmq_msg_init (&msg);
+    if (zmq_msg_recv (&msg, socket, 0) == -1)
+        return -1;              //  Interrupted, presumably
+    //assert (zmq_msg_more (&msg));
+    char local_address[ZMQ_MAX_ENDPOINT_LENGTH +1];
+    memset(local_address, '\0', sizeof(local_address));
+    uint8_t *data1 = (uint8_t *) zmq_msg_data (&msg);
+    size_t size1 = zmq_msg_size (&msg);
+    memcpy (local_address, data1, size1);
+    zmq_msg_close (&msg);
 
-      if (items[1].revents & ZMQ_POLLIN) {
-         rc = monitorEvent(dataSub, "dataSub");
-         assert(rc == 0);
-      }
+    //  Last frame in message contains remote address
+    zmq_msg_init (&msg);
+    if (zmq_msg_recv (&msg, socket, 0) == -1)
+        return -1;              //  Interrupted, presumably
+    //assert (!zmq_msg_more (&msg));
+    char remote_address[ZMQ_MAX_ENDPOINT_LENGTH +1];
+    memset(remote_address, '\0', sizeof(remote_address));
+    uint8_t *data2 = (uint8_t *) zmq_msg_data (&msg);
+    size_t size2 = zmq_msg_size (&msg);
+    memcpy (remote_address, data2, size2);
+    zmq_msg_close (&msg);
 
-      if (items[2].revents & ZMQ_POLLIN) {
-         rc = monitorEvent(proxyPub, "proxyPub");
-         assert(rc == 0);
-      }
+   log_msg("name:%s event:%s value:%llu local:%s remote:%s", socketName, eventName, value, local_address, remote_address);
 
-      if (items[3].revents & ZMQ_POLLIN) {
-         rc = monitorEvent(proxySub, "proxySub");
-         assert(rc == 0);
-      }
-
-      if (items[4].revents & ZMQ_POLLIN) {
-         break;
-      }
-   }
-
-
-   rc = zmq_close(dataPub);
-   assert(rc == 0);
-
-   rc = zmq_close(dataSub);
-   assert(rc == 0);
-
-   rc = zmq_close(proxyPub);
-   assert(rc == 0);
-
-   rc = zmq_close(proxySub);
-   assert(rc == 0);
-
-   return NULL;
+   return 0;
 }
+
 
 
 int startMonitor(void* context)
@@ -222,3 +214,30 @@ int stopMonitor()
    return 0;
 }
 
+void* monitorFunc(void* context)
+{
+   int rc;
+
+   void* dataSub = zmq_socket(context, ZMQ_PAIR);
+   assert(dataSub);
+   rc = zmq_connect(dataSub, "inproc://dataSub");
+   assert(rc == 0);
+
+
+   while(1) {
+      zmq_pollitem_t items[] = {
+         { dataSub,    0, ZMQ_POLLIN , 0},
+      };
+      rc = zmq_poll(items, 1, -1);
+
+      if (items[0].revents & ZMQ_POLLIN) {
+         rc = monitorEvent_v2(dataSub, "dataSub");
+         assert(rc == 0);
+      }
+   }
+
+   rc = zmq_close(dataSub);
+   assert(rc == 0);
+
+   return NULL;
+}

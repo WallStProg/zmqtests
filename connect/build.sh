@@ -2,4 +2,6 @@
 
 source ./setenv.sh
 
-rm -rf CMakeFiles CMakeCache*; cmake . && make clean && make
+rm -rf CMakeFiles CMakeCache*;
+
+cmake . && make clean && make
